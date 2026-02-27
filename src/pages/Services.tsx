@@ -5,6 +5,7 @@ import { useReveal } from '@/hooks/useReveal';
 import { Globe, ShoppingCart, Wrench, MessageSquare, Palette, Code, Rocket } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { RadialOrbitalTimeline } from '@/components/ui/radial-orbital-timeline';
 
 const services = [
   {
@@ -27,22 +28,36 @@ const services = [
   },
 ];
 
-const processSteps = [
-  { icon: MessageSquare, title: 'Échange', step: '01', desc: 'Nous discutons de votre projet, vos objectifs et vos besoins pour définir la solution idéale.' },
-  { icon: Palette, title: 'Conception', step: '02', desc: 'Nous créons la maquette et le design de votre site, validés avec vous avant développement.' },
-  { icon: Code, title: 'Développement', step: '03', desc: 'Votre site est développé avec les meilleures technologies, testé sur tous les appareils.' },
-  { icon: Rocket, title: 'Livraison', step: '04', desc: 'Mise en ligne, formation et remise des accès. Votre site est prêt à convertir.' },
+const processData = [
+  {
+    id: 1, title: "Échange", date: "Étape 1",
+    content: "Nous discutons de votre projet, vos objectifs et vos besoins pour définir la solution idéale.",
+    category: "Discovery", icon: MessageSquare, status: "completed" as const,
+  },
+  {
+    id: 2, title: "Conception", date: "Étape 2",
+    content: "Nous créons la maquette et le design de votre site, validés avec vous avant développement.",
+    category: "Design", icon: Palette, status: "completed" as const,
+  },
+  {
+    id: 3, title: "Développement", date: "Étape 3",
+    content: "Votre site est développé avec les meilleures technologies, testé sur tous les appareils.",
+    category: "Dev", icon: Code, status: "in-progress" as const,
+  },
+  {
+    id: 4, title: "Livraison", date: "Étape 4",
+    content: "Mise en ligne, formation et remise des accès. Votre site est prêt à convertir.",
+    category: "Launch", icon: Rocket, status: "pending" as const,
+  },
 ];
 
 const Services = () => {
-  const processReveal = useReveal(0.1);
-
   return (
     <div className="relative">
       {/* Hero */}
       <section className="pt-24 pb-16 px-4 text-center">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-glow bg-gradient-dark text-xs font-body font-semibold uppercase tracking-widest text-violet mb-6">
+          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[rgba(123,47,255,0.18)] bg-gradient-dark text-xs font-body font-semibold uppercase tracking-widest text-violet mb-6">
             Nos services
           </span>
         </motion.div>
@@ -50,10 +65,8 @@ const Services = () => {
           fixedText="Propulsez votre présence"
           words={['au sommet.', 'en avant.', 'vers l\'avenir.', 'plus loin.', 'autrement.']}
         />
-        <motion.p
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}
-          className="mt-6 max-w-lg mx-auto text-lg text-muted-foreground"
-        >
+        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}
+          className="mt-6 max-w-lg mx-auto text-lg text-muted-foreground">
           Des solutions digitales adaptées à chaque besoin et chaque budget.
         </motion.p>
       </section>
@@ -65,8 +78,7 @@ const Services = () => {
             const reveal = useReveal(0.1, i % 2 === 0 ? 'up' : 'left');
             return (
               <div key={i} ref={reveal.ref} style={reveal.style}
-                className={`flex flex-col ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} gap-8 items-center`}
-              >
+                className={`flex flex-col ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} gap-8 items-center`}>
                 <div className="flex-1">
                   <div className="w-14 h-14 rounded-2xl bg-gradient-dark flex items-center justify-center mb-5">
                     <s.icon size={26} className="text-violet" />
@@ -77,8 +89,7 @@ const Services = () => {
                   <ul className="space-y-2 mb-6">
                     {s.features.map((f, j) => (
                       <li key={j} className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <span className="w-1.5 h-1.5 rounded-full bg-violet" />
-                        {f}
+                        <span className="w-1.5 h-1.5 rounded-full bg-violet" />{f}
                       </li>
                     ))}
                   </ul>
@@ -87,7 +98,7 @@ const Services = () => {
                   </Link>
                 </div>
                 <div className="flex-1 w-full">
-                  <div className="bg-gradient-card border border-glow rounded-2xl aspect-[4/3] flex items-center justify-center">
+                  <div className="bg-gradient-card border border-[rgba(123,47,255,0.18)] rounded-2xl aspect-[4/3] flex items-center justify-center">
                     <s.icon size={64} className="text-violet/20" />
                   </div>
                 </div>
@@ -97,29 +108,16 @@ const Services = () => {
         </div>
       </section>
 
-      {/* Processus */}
-      <section className="py-24 px-4" ref={processReveal.ref} style={processReveal.style}>
-        <div className="container mx-auto max-w-4xl">
+      {/* Processus — RadialOrbitalTimeline */}
+      <section className="py-24 px-4">
+        <div className="container mx-auto max-w-5xl">
           <div className="text-center mb-16">
             <SectionLabel>Notre méthode</SectionLabel>
             <h2 className="font-heading font-bold text-[34px] md:text-[52px] leading-[1.1] mt-4 text-foreground">
               Notre Méthode en <span className="text-gradient">4 Étapes</span>
             </h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {processSteps.map((step, i) => (
-              <div key={i} className="bg-gradient-card border border-glow rounded-2xl p-8 card-lift">
-                <div className="flex items-center gap-4 mb-4">
-                  <span className="text-gradient font-heading font-extrabold text-3xl">{step.step}</span>
-                  <div className="w-10 h-10 rounded-xl bg-gradient-dark flex items-center justify-center">
-                    <step.icon size={18} className="text-violet" />
-                  </div>
-                </div>
-                <h3 className="font-heading font-semibold text-xl text-foreground mb-2">{step.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{step.desc}</p>
-              </div>
-            ))}
-          </div>
+          <RadialOrbitalTimeline items={processData} />
         </div>
       </section>
 
