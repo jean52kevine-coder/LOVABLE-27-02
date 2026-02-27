@@ -1,169 +1,270 @@
 import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
-import { ChevronDown, Menu, X } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { Home, Layers, Euro, HelpCircle } from 'lucide-react';
 
-const navLinks = [
-  { label: 'Accueil', path: '/' },
-  {
-    label: 'Services',
-    path: '/services',
-    dropdown: [
-      { label: 'Site Vitrine', price: '497€', path: '/site-vitrine', icon: '🌐' },
-      { label: 'Site E-commerce', price: '747€', path: '/site-ecommerce', icon: '🛒' },
-      { label: 'Maintenance & SEO', price: 'dès 39€/mois', path: '/maintenance', icon: '🛡️' },
-    ],
-  },
-  { label: 'Tarifs', path: '/tarifs' },
-  { label: 'Pourquoi un site ?', path: '/pourquoi-un-site' },
+const ITEMS = [
+  { name: 'Accueil', url: '/', icon: Home },
+  { name: 'Services', url: '/services', icon: Layers },
+  { name: 'Tarifs', url: '/tarifs', icon: Euro },
+  { name: 'Pourquoi un site ?', url: '/pourquoi-un-site', icon: HelpCircle },
 ];
 
-export const Navbar = () => {
-  const [scrolled, setScrolled] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
+export default function Navbar() {
   const location = useLocation();
+  const [scrolled, setScrolled] = useState(false);
+
+  const active = ITEMS.find((i) =>
+    i.url === '/' ? location.pathname === '/' : location.pathname.startsWith(i.url),
+  )?.name ?? ITEMS[0].name;
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60);
-    window.addEventListener('scroll', onScroll);
-    return () => window.removeEventListener('scroll', onScroll);
+    const fn = () => setScrolled(window.scrollY > 60);
+    window.addEventListener('scroll', fn);
+    return () => window.removeEventListener('scroll', fn);
   }, []);
 
-  useEffect(() => {
-    setMobileOpen(false);
-    setDropdownOpen(false);
-  }, [location.pathname]);
-
   return (
-    <nav
-      className={`sticky top-0 z-50 h-[72px] flex items-center transition-all duration-300 ${
-        scrolled
-          ? 'bg-bg-deep/85 backdrop-blur-2xl border-b border-glow'
-          : 'bg-transparent'
-      }`}
-    >
-      <div className="container mx-auto flex items-center justify-between">
-        {/* Logo */}
-        <Link to="/" className="font-heading font-extrabold text-2xl text-foreground tracking-tight">
-          ALT<span className="text-gradient">É</span>RA
-        </Link>
+    <>
+      <nav
+        className="hidden md:flex"
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 100,
+          transition: 'all 400ms ease',
+          background: scrolled ? 'rgba(3,3,10,0.90)' : 'transparent',
+          backdropFilter: scrolled ? 'blur(24px)' : 'none',
+          borderBottom: scrolled ? '1px solid rgba(123,47,255,0.15)' : '1px solid transparent',
+        }}
+      >
+        <div
+          style={{
+            maxWidth: '1200px',
+            margin: '0 auto',
+            padding: '0 48px',
+            height: '72px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            width: '100%',
+          }}
+        >
+          <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div
+              style={{
+                width: '36px',
+                height: '36px',
+                borderRadius: '10px',
+                background: 'linear-gradient(135deg,#7B2FFF,#00C2FF)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 0 20px rgba(123,47,255,0.5)',
+              }}
+            >
+              <span style={{ fontFamily: 'Syne,sans-serif', fontWeight: 800, fontSize: '18px', color: 'white' }}>A</span>
+            </div>
+            <span style={{ fontFamily: 'Syne,sans-serif', fontWeight: 800, fontSize: '21px' }}>
+              <span style={{ color: 'white' }}>ALT</span>
+              <span style={{ background: 'linear-gradient(135deg,#7B2FFF,#00C2FF)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>É</span>
+              <span style={{ color: 'white' }}>RA</span>
+            </span>
+          </Link>
 
-        {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) =>
-            link.dropdown ? (
-              <div
-                key={link.label}
-                className="relative"
-                onMouseEnter={() => setDropdownOpen(true)}
-                onMouseLeave={() => setDropdownOpen(false)}
-              >
-                <button className="flex items-center gap-1 text-sm font-body font-medium text-muted-foreground hover:text-foreground transition-colors">
-                  {link.label}
-                  <ChevronDown size={14} className={`transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
-                </button>
-                <AnimatePresence>
-                  {dropdownOpen && (
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '2px',
+              background: 'rgba(255,255,255,0.03)',
+              border: '1px solid rgba(255,255,255,0.07)',
+              borderRadius: '999px',
+              padding: '4px',
+              backdropFilter: 'blur(10px)',
+            }}
+          >
+            {ITEMS.map((item) => {
+              const isActive = active === item.name;
+              return (
+                <Link
+                  key={item.name}
+                  to={item.url}
+                  style={{
+                    position: 'relative',
+                    textDecoration: 'none',
+                    padding: '8px 22px',
+                    borderRadius: '999px',
+                    fontFamily: 'DM Sans,sans-serif',
+                    fontWeight: 500,
+                    fontSize: '14px',
+                    color: isActive ? 'white' : 'rgba(255,255,255,0.5)',
+                    transition: 'color 200ms ease',
+                    display: 'block',
+                  }}
+                >
+                  {item.name}
+                  {isActive && (
                     <motion.div
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 8 }}
-                      transition={{ duration: 0.2 }}
-                      className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-72 bg-bg-mid/95 backdrop-blur-xl border border-glow rounded-2xl p-3 shadow-2xl"
+                      layoutId="tubelight-desktop"
+                      style={{
+                        position: 'absolute',
+                        inset: 0,
+                        borderRadius: '999px',
+                        background: 'rgba(123,47,255,0.18)',
+                        zIndex: -1,
+                      }}
+                      transition={{ type: 'spring', stiffness: 380, damping: 38 }}
                     >
-                      {link.dropdown.map((item) => (
-                        <Link
-                          key={item.path}
-                          to={item.path}
-                          className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gradient-dark transition-colors group"
-                        >
-                          <span className="text-lg">{item.icon}</span>
-                          <div className="flex-1">
-                            <div className="text-sm font-medium text-foreground group-hover:text-gradient">{item.label}</div>
-                            <div className="text-xs text-muted-foreground">{item.price}</div>
-                          </div>
-                        </Link>
-                      ))}
+                      <div
+                        style={{
+                          position: 'absolute',
+                          top: '-2px',
+                          left: '50%',
+                          transform: 'translateX(-50%)',
+                          width: '50%',
+                          height: '2px',
+                          borderRadius: '999px',
+                          background: 'linear-gradient(90deg,#7B2FFF,#00C2FF)',
+                          boxShadow: '0 0 10px #7B2FFF, 0 0 20px rgba(123,47,255,0.5)',
+                        }}
+                      />
+                      <div
+                        style={{
+                          position: 'absolute',
+                          top: '-8px',
+                          left: '50%',
+                          transform: 'translateX(-50%)',
+                          width: '70%',
+                          height: '16px',
+                          background: 'rgba(123,47,255,0.12)',
+                          borderRadius: '50%',
+                          filter: 'blur(6px)',
+                        }}
+                      />
                     </motion.div>
                   )}
-                </AnimatePresence>
-              </div>
-            ) : (
-              <Link
-                key={link.label}
-                to={link.path}
-                className={`text-sm font-body font-medium transition-colors ${
-                  location.pathname === link.path
-                    ? 'text-foreground'
-                    : 'text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                {link.label}
-              </Link>
-            )
-          )}
-        </div>
+                </Link>
+              );
+            })}
+          </div>
 
-        {/* CTA + Mobile */}
-        <div className="flex items-center gap-4">
           <Link
             to="/contact"
-            className="hidden md:inline-flex px-6 py-2.5 rounded-full bg-gradient-primary text-sm font-body font-semibold text-foreground hover:opacity-90 transition-opacity"
+            style={{
+              textDecoration: 'none',
+              padding: '10px 26px',
+              borderRadius: '10px',
+              background: 'linear-gradient(135deg,#7B2FFF,#00C2FF)',
+              fontFamily: 'DM Sans,sans-serif',
+              fontWeight: 600,
+              fontSize: '14px',
+              color: 'white',
+              boxShadow: '0 4px 20px rgba(123,47,255,0.35)',
+              transition: 'transform 200ms, box-shadow 200ms',
+              display: 'inline-block',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 8px 28px rgba(123,47,255,0.55)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'none';
+              e.currentTarget.style.boxShadow = '0 4px 20px rgba(123,47,255,0.35)';
+            }}
           >
             Devis gratuit
           </Link>
-          <button
-            className="md:hidden text-foreground"
-            onClick={() => setMobileOpen(!mobileOpen)}
-          >
-            {mobileOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
         </div>
-      </div>
+      </nav>
 
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="absolute top-[72px] left-0 right-0 bg-bg-deep/95 backdrop-blur-2xl border-b border-glow p-6 flex flex-col gap-4 md:hidden"
-          >
-            {navLinks.map((link) =>
-              link.dropdown ? (
-                <div key={link.label} className="flex flex-col gap-2">
-                  <span className="text-sm font-medium text-muted-foreground">{link.label}</span>
-                  {link.dropdown.map((item) => (
-                    <Link
-                      key={item.path}
-                      to={item.path}
-                      className="pl-4 py-2 text-sm text-foreground hover:text-gradient transition-colors"
-                    >
-                      {item.icon} {item.label} — {item.price}
-                    </Link>
-                  ))}
-                </div>
-              ) : (
-                <Link
-                  key={link.label}
-                  to={link.path}
-                  className="text-sm font-medium text-foreground"
-                >
-                  {link.label}
-                </Link>
-              )
-            )}
-            <Link
-              to="/contact"
-              className="mt-2 text-center px-6 py-3 rounded-full bg-gradient-primary text-sm font-semibold text-foreground"
-            >
-              Devis gratuit
-            </Link>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </nav>
+      <nav
+        className="flex md:hidden"
+        style={{
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          zIndex: 100,
+          padding: '12px 16px 20px',
+          background: 'rgba(3,3,10,0.92)',
+          backdropFilter: 'blur(24px)',
+          borderTop: '1px solid rgba(123,47,255,0.15)',
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-around',
+            alignItems: 'center',
+            width: '100%',
+            background: 'rgba(255,255,255,0.03)',
+            border: '1px solid rgba(255,255,255,0.07)',
+            borderRadius: '999px',
+            padding: '6px',
+          }}
+        >
+          {ITEMS.map((item) => {
+            const Icon = item.icon;
+            const isActive = active === item.name;
+            return (
+              <Link
+                key={item.name}
+                to={item.url}
+                style={{
+                  position: 'relative',
+                  textDecoration: 'none',
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '8px 4px',
+                  borderRadius: '999px',
+                  gap: '2px',
+                  color: isActive ? 'white' : 'rgba(255,255,255,0.4)',
+                  transition: 'color 200ms',
+                }}
+              >
+                {isActive && (
+                  <motion.div
+                    layoutId="tubelight-mobile"
+                    style={{
+                      position: 'absolute',
+                      inset: 0,
+                      borderRadius: '999px',
+                      background: 'rgba(123,47,255,0.2)',
+                      zIndex: -1,
+                    }}
+                    transition={{ type: 'spring', stiffness: 380, damping: 38 }}
+                  >
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: '-2px',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        width: '40%',
+                        height: '2px',
+                        borderRadius: '999px',
+                        background: 'linear-gradient(90deg,#7B2FFF,#00C2FF)',
+                        boxShadow: '0 0 8px #7B2FFF',
+                      }}
+                    />
+                  </motion.div>
+                )}
+                <Icon size={20} strokeWidth={isActive ? 2.5 : 1.8} />
+                <span style={{ fontFamily: 'DM Sans,sans-serif', fontSize: '10px', fontWeight: 500 }}>{item.name.split(' ')[0]}</span>
+              </Link>
+            );
+          })}
+        </div>
+      </nav>
+
+      <div className="hidden md:block" style={{ height: '72px' }} />
+      <div className="flex md:hidden" style={{ height: '80px' }} />
+    </>
   );
-};
+}

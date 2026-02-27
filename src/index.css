@@ -68,8 +68,10 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    background: #03030A;
+    margin: 0;
     font-family: 'DM Sans', sans-serif;
+    color: white;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -182,3 +184,6 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+
+* { box-sizing: border-box; }

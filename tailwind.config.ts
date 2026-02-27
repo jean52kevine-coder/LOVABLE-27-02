@@ -102,6 +102,10 @@ export default {
           "0%, 100%": { transform: "translateY(0)" },
           "50%": { transform: "translateY(-10px)" },
         },
+        marqueeScroll: {
+          from: { transform: 'translateX(0)' },
+          to: { transform: 'translateX(calc(-50% - 0.75rem))' },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
