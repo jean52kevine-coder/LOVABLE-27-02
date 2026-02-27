@@ -1,118 +1,62 @@
-import { useState, useEffect, useMemo, useRef } from 'react';
-import { motion, AnimatePresence, useInView } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import {
-  ArrowRight, Check, Star, Zap, Shield, TrendingUp,
-  Globe, ShoppingCart, Wrench,
-} from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
+import TestimonialsMarquee from '@/components/TestimonialsMarquee';
 
-export default function Home() {
-  return (
-    <main style={{ position: 'relative', zIndex: 1 }}>
-      <HeroSection />
-      <StatsSection />
-      <ServicesSection />
-      <ProcessSection />
-      <WhyAlteraSection />
-      <PricingSection />
-      <TestimonialsSection />
-      <FinalCTASection />
-    </main>
-  );
-}
-
-function HeroSection() {
-  const navigate = useNavigate();
-  const [titleIndex, setTitleIndex] = useState(0);
+function AnimatedHero() {
   const titles = useMemo(() => ['artisans', 'commerçants', 'restaurants', 'PME locales', 'indépendants'], []);
+  const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    const id = setInterval(() => setTitleIndex((p) => (p + 1) % titles.length), 2300);
-    return () => clearInterval(id);
+    const timer = window.setInterval(() => {
+      setIndex((prev) => (prev + 1) % titles.length);
+    }, 2200);
+    return () => window.clearInterval(timer);
   }, [titles.length]);
 
   return (
-    <section style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '100px 24px 60px', textAlign: 'center' }}>
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1, duration: 0.6 }}
-        style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 20px', borderRadius: '999px', marginBottom: '36px', background: 'rgba(123,47,255,0.1)', border: '1px solid rgba(123,47,255,0.3)' }}
-      >
-        <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#7B2FFF', boxShadow: '0 0 8px #7B2FFF', display: 'inline-block', animation: 'pulseDot 2s ease-in-out infinite' }} />
-        <span style={{ fontFamily: 'DM Sans,sans-serif', fontWeight: 600, fontSize: '11px', letterSpacing: '0.22em', textTransform: 'uppercase', color: '#9B5FFF' }}>AGENCE WEB PREMIUM</span>
-      </motion.div>
-
-      <div style={{ marginBottom: '28px' }}>
-        <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.25, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          style={{ fontFamily: 'Syne,sans-serif', fontWeight: 800, fontSize: 'clamp(44px,7.5vw,84px)', lineHeight: 1.04, color: 'white', margin: '0 0 4px' }}
-        >
-          Le site web des
-        </motion.h1>
-
-        <div style={{ height: 'clamp(52px,9vw,96px)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+    <section className="min-h-screen flex items-center justify-center px-4 pt-24">
+      <div className="max-w-4xl mx-auto text-center">
+        <span className="inline-flex items-center gap-2 rounded-full border border-[rgba(123,47,255,0.25)] px-4 py-2 text-xs tracking-[0.18em] text-white/75 font-semibold">
+          <span className="h-2 w-2 rounded-full bg-[#7B2FFF] animate-pulse" />AGENCE WEB PREMIUM
+        </span>
+        <h1 className="mt-6 font-heading text-white text-5xl md:text-7xl font-extrabold">Le site web des</h1>
+        <div className="h-[84px] mt-2 overflow-hidden">
           <AnimatePresence mode="wait">
             <motion.span
-              key={titleIndex}
-              initial={{ y: 70, opacity: 0, rotateX: -20 }}
+              key={titles[index]}
+              initial={{ y: 60, opacity: 0, rotateX: -15 }}
               animate={{ y: 0, opacity: 1, rotateX: 0 }}
-              exit={{ y: -70, opacity: 0, rotateX: 20 }}
-              transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
-              style={{ display: 'block', fontFamily: 'Syne,sans-serif', fontWeight: 800, fontSize: 'clamp(44px,7.5vw,84px)', lineHeight: 1.04, background: 'linear-gradient(135deg,#7B2FFF,#00C2FF)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
+              exit={{ y: -60, opacity: 0, rotateX: 15 }}
+              transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+              className="inline-block font-heading text-5xl md:text-7xl font-extrabold bg-gradient-to-r from-[#7B2FFF] to-[#00C2FF] bg-clip-text text-transparent"
             >
-              {titles[titleIndex]}
+              {titles[index]}
             </motion.span>
           </AnimatePresence>
         </div>
-      </div>
-
-      <motion.p
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.55, duration: 0.7 }}
-        style={{ fontFamily: 'DM Sans,sans-serif', fontSize: 'clamp(16px,2vw,20px)', color: 'rgba(255,255,255,0.55)', lineHeight: 1.75, maxWidth: '540px', marginBottom: '44px' }}
-      >
-        Nous créons des sites professionnels qui attirent des clients.
-        Design sur-mesure, livraison en 14 jours, résultats concrets.
-      </motion.p>
-
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.7, duration: 0.6 }}
-        style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '60px' }}
-      >
-        <button
-          onClick={() => navigate('/contact')}
-          style={{ padding: '15px 38px', borderRadius: '12px', border: 'none', cursor: 'pointer', background: 'linear-gradient(135deg,#7B2FFF,#00C2FF)', fontFamily: 'DM Sans,sans-serif', fontWeight: 600, fontSize: '16px', color: 'white', boxShadow: '0 8px 32px rgba(123,47,255,0.4)', transition: 'transform 250ms, box-shadow 250ms' }}
-          onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = '0 14px 40px rgba(123,47,255,0.6)'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(123,47,255,0.4)'; }}
-        >
-          Démarrer mon projet →
-        </button>
-        <button
-          onClick={() => navigate('/tarifs')}
-          style={{ padding: '15px 38px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.14)', background: 'transparent', cursor: 'pointer', fontFamily: 'DM Sans,sans-serif', fontWeight: 600, fontSize: '16px', color: 'white', transition: 'border-color 250ms, background 250ms' }}
-          onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'rgba(123,47,255,0.5)'; e.currentTarget.style.background = 'rgba(123,47,255,0.08)'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.14)'; e.currentTarget.style.background = 'transparent'; }}
-        >
-          Voir les tarifs
-        </button>
-      </motion.div>
-
-      <div style={{ width: '100%', overflow: 'hidden', marginBottom: '12px', maskImage: 'linear-gradient(to right,transparent,black 10%,black 90%,transparent)', WebkitMaskImage: 'linear-gradient(to right,transparent,black 10%,black 90%,transparent)' }}>
-        <div style={{ display: 'flex', gap: '40px', width: 'max-content', animation: 'marqueeRoll 30s linear infinite' }}>
-          {[...Array(2)].flatMap(() =>
-            ['Site Vitrine', 'Site E-commerce', 'Maintenance & SEO', 'Design Premium', 'Référencement Local', 'Livraison 14 jours', 'Mobile First', 'SSL Inclus', 'Support Dédié', 'PME & Artisans'].map((t, i) => (
-              <span key={t + i} style={{ fontFamily: 'DM Sans,sans-serif', fontSize: '13px', color: 'rgba(255,255,255,0.2)', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '14px' }}>
-                <span style={{ width: '4px', height: '4px', borderRadius: '50%', flexShrink: 0, background: 'linear-gradient(135deg,#7B2FFF,#00C2FF)', display: 'inline-block' }} />
-                {t}
-              </span>
-            )),
-          )}
+        <p className="mt-4 text-[18px] text-[rgba(255,255,255,0.55)] max-w-2xl mx-auto">
+          ALTÉRA crée des sites vitrines et e-commerce premium pour transformer votre visibilité locale en résultats concrets.
+        </p>
+        <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <Link to="/contact?type=vitrine" className="rounded-xl px-7 py-3 text-white font-semibold bg-gradient-to-r from-[#7B2FFF] to-[#00C2FF]">
+            Démarrer mon projet
+          </Link>
+          <Link to="/tarifs" className="rounded-xl px-7 py-3 text-white border border-[rgba(123,47,255,0.35)]">
+            Voir les tarifs
+          </Link>
+        </div>
+        <div className="mt-8 whitespace-nowrap overflow-hidden text-sm text-white/50">
+          <motion.div
+            animate={{ x: ['0%', '-50%'] }}
+            transition={{ duration: 16, ease: 'linear', repeat: Infinity }}
+            className="inline-flex gap-4"
+          >
+            {Array.from({ length: 2 }).map((_, i) => (
+              <span key={i}>Site Vitrine · Site E-commerce · Maintenance · Refonte · SEO local · Support premium ·</span>
+            ))}
+          </motion.div>
         </div>
       </div>
 

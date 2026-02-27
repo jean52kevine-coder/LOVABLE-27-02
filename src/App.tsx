@@ -4,11 +4,11 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { lazy, Suspense, useState } from 'react';
-import LoadingScreen from '@/components/LoadingScreen';
 import CosmicBackground from '@/components/CosmicBackground';
-import Navbar from '@/components/Navbar';
-import ScrollToTop from '@/components/ScrollToTop';
+import { TubelightNavBar } from '@/components/ui/tubelight-navbar';
 import { Footer } from '@/components/Footer';
+import LoadingScreen from '@/components/LoadingScreen';
+import ScrollToTop from '@/components/ScrollToTop';
 
 const Index = lazy(() => import('./pages/Index'));
 const Services = lazy(() => import('./pages/Services'));
@@ -30,30 +30,23 @@ function Loading() {
   );
 }
 
-function App() {
+export default function App() {
   const [loaded, setLoaded] = useState(false);
 
   return (
     <>
       {!loaded && <LoadingScreen onComplete={() => setLoaded(true)} />}
-      <div
-        style={{
-          opacity: loaded ? 1 : 0,
-          transition: 'opacity 500ms ease 150ms',
-          background: '#03030A',
-          minHeight: '100vh',
-        }}
-      >
-        <CosmicBackground />
-        <div style={{ position: 'relative', zIndex: 1 }}>
-          <QueryClientProvider client={queryClient}>
-            <TooltipProvider>
-              <Toaster />
-              <Sonner />
-              <BrowserRouter>
-                <ScrollToTop />
-                <Navbar />
-                <main className="pb-[80px] md:pb-0">
+      <div style={{ opacity: loaded ? 1 : 0, transition: 'opacity 500ms ease 100ms', background: '#03030A', minHeight: '100vh' }}>
+        <QueryClientProvider client={queryClient}>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <ScrollToTop />
+              <CosmicBackground />
+              <div style={{ position: 'relative', zIndex: 1 }}>
+                <TubelightNavBar />
+                <main>
                   <Suspense fallback={<Loading />}>
                     <Routes>
                       <Route path="/" element={<Index />} />

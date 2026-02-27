@@ -1,27 +1,27 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
-export default function LoadingScreen({ onComplete }: { onComplete: () => void }) {
-  const [phase, setPhase] = useState<'enter' | 'show' | 'exit'>('enter');
+interface Props {
+  onComplete: () => void;
+}
+
+export default function LoadingScreen({ onComplete }: Props) {
+  const [phase, setPhase] = useState<'enter' | 'pulse' | 'exit'>('enter');
   const [progress, setProgress] = useState(0);
+  const letters = useMemo(() => ['A', 'L', 'T', 'É', 'R', 'A'], []);
 
   useEffect(() => {
-    const t1 = setTimeout(() => setPhase('show'), 500);
-    const t2 = setTimeout(() => setPhase('exit'), 1900);
-    const t3 = setTimeout(() => onComplete(), 2300);
-    const iv = setInterval(() =>
-      setProgress((p) => {
-        if (p >= 100) {
-          clearInterval(iv);
-          return 100;
-        }
-        return p + 2;
-      }), 30);
+    const pulseTimer = window.setTimeout(() => setPhase('pulse'), 600);
+    const progressInterval = window.setInterval(() => {
+      setProgress((prev) => Math.min(100, prev + 2));
+    }, 30);
+    const exitTimer = window.setTimeout(() => setPhase('exit'), 1800);
+    const completeTimer = window.setTimeout(onComplete, 2200);
 
     return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
-      clearTimeout(t3);
-      clearInterval(iv);
+      clearTimeout(pulseTimer);
+      clearTimeout(exitTimer);
+      clearTimeout(completeTimer);
+      clearInterval(progressInterval);
     };
   }, [onComplete]);
 
@@ -30,142 +30,45 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
       style={{
         position: 'fixed',
         inset: 0,
-        zIndex: 9999,
+        zIndex: 100,
         background: '#03030A',
         display: 'flex',
-        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        transition: 'opacity 400ms ease, transform 400ms ease',
+        flexDirection: 'column',
+        transition: 'opacity 380ms ease, transform 420ms ease',
         opacity: phase === 'exit' ? 0 : 1,
-        transform: phase === 'exit' ? 'scale(1.03)' : 'scale(1)',
-        pointerEvents: phase === 'exit' ? 'none' : 'all',
+        transform: phase === 'exit' ? 'scale(1.04)' : 'scale(1)',
       }}
     >
-      {[{ top: '20%', left: '25%', color: 'rgba(123,47,255,0.1)' }, { bottom: '20%', right: '20%', color: 'rgba(0,194,255,0.08)' }].map((o, i) => (
-        <div
-          key={i}
-          style={{
-            position: 'absolute',
-            width: '400px',
-            height: '400px',
-            borderRadius: '50%',
-            background: `radial-gradient(circle,${o.color} 0%,transparent 70%)`,
-            filter: 'blur(40px)',
-            animation: 'orbFloat 4s ease-in-out infinite',
-            animationDelay: i === 1 ? '2s' : '0s',
-            ...o,
-          }}
-        />
-      ))}
+      <div className="orb orb-1" />
+      <div className="orb orb-2" />
 
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '24px',
-          transform: phase === 'enter' ? 'scale(0.7) translateY(16px)' : 'scale(1) translateY(0)',
-          opacity: phase === 'enter' ? 0 : 1,
-          transition: 'all 550ms cubic-bezier(.22,1,.36,1)',
-        }}
-      >
-        <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div
-            style={{
-              position: 'absolute',
-              width: '120px',
-              height: '120px',
-              borderRadius: '50%',
-              border: '1px solid rgba(123,47,255,0.25)',
-              animation: 'ringCW 7s linear infinite',
-            }}
-          >
-            <div
-              style={{
-                position: 'absolute',
-                top: '-4px',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                width: '8px',
-                height: '8px',
-                borderRadius: '50%',
-                background: 'linear-gradient(135deg,#7B2FFF,#00C2FF)',
-                boxShadow: '0 0 10px #7B2FFF',
-              }}
-            />
-          </div>
-          <div
-            style={{
-              position: 'absolute',
-              width: '88px',
-              height: '88px',
-              borderRadius: '50%',
-              border: '1px dashed rgba(0,194,255,0.2)',
-              animation: 'ringCCW 5s linear infinite',
-            }}
-          />
-          <div
-            style={{
-              position: 'absolute',
-              width: '64px',
-              height: '64px',
-              borderRadius: '50%',
-              background: 'radial-gradient(circle,rgba(123,47,255,0.35) 0%,transparent 70%)',
-              filter: 'blur(10px)',
-              animation: phase === 'show' ? 'logoPulse 1.8s ease-in-out infinite' : 'none',
-            }}
-          />
-          <div
-            style={{
-              width: '60px',
-              height: '60px',
-              borderRadius: '16px',
-              zIndex: 1,
-              background: 'linear-gradient(135deg,#7B2FFF,#00C2FF)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 0 40px rgba(123,47,255,0.6)',
-            }}
-          >
-            <span style={{ fontFamily: 'Syne,sans-serif', fontWeight: 800, fontSize: '30px', color: 'white' }}>A</span>
-          </div>
-        </div>
-
-        <div style={{ display: 'flex', letterSpacing: '0.18em' }}>
-          {['A', 'L', 'T', 'É', 'R', 'A'].map((l, i) => (
-            <span
-              key={i}
-              style={{
-                fontFamily: 'Syne,sans-serif',
-                fontWeight: 800,
-                fontSize: '34px',
-                background: i === 3 ? 'linear-gradient(135deg,#7B2FFF,#00C2FF)' : 'white',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                animation: `letterIn .4s cubic-bezier(.22,1,.36,1) ${0.08 + i * 0.06}s both`,
-              }}
-            >
-              {l}
-            </span>
-          ))}
-        </div>
-
-        <p
-          style={{
-            fontFamily: 'DM Sans,sans-serif',
-            fontWeight: 400,
-            fontSize: '12px',
-            letterSpacing: '0.28em',
-            textTransform: 'uppercase',
-            color: 'rgba(255,255,255,0.28)',
-            animation: 'fadeUp .5s ease .55s both',
-          }}
-        >
-          Agence Web Premium
-        </p>
+      <div style={{ position: 'relative', width: 120, height: 120, marginBottom: 28 }}>
+        <div className="ring ring-outer" />
+        <div className="ring ring-inner" />
+        <div className="logo-box">A</div>
       </div>
+
+      <div style={{ display: 'flex', gap: 2, marginBottom: 8 }}>
+        {letters.map((letter, index) => (
+          <span
+            key={letter + index}
+            className="letter"
+            style={{
+              animationDelay: `${index * 120}ms`,
+              color: letter === 'É' ? 'transparent' : '#FFF',
+              background: letter === 'É' ? 'linear-gradient(135deg, #7B2FFF, #00C2FF)' : 'none',
+              WebkitBackgroundClip: letter === 'É' ? 'text' : 'initial',
+            }}
+          >
+            {letter}
+          </span>
+        ))}
+      </div>
+      <p style={{ color: 'rgba(255,255,255,0.3)', letterSpacing: '0.24em', fontSize: 11, fontFamily: 'DM Sans, sans-serif' }}>
+        Agence Web Premium
+      </p>
 
       <div style={{ position: 'absolute', bottom: '72px', width: '180px', animation: 'fadeUp .5s ease .35s both' }}>
         <div style={{ height: '2px', borderRadius: '999px', background: 'rgba(255,255,255,0.07)', overflow: 'hidden' }}>
@@ -189,6 +92,26 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
         @keyframes ringCCW{to{transform:rotate(-360deg)}}
         @keyframes logoPulse{0%,100%{opacity:.6;transform:scale(1)}50%{opacity:1;transform:scale(1.35)}}
         @keyframes orbFloat{0%,100%{transform:scale(1);opacity:.7}50%{transform:scale(1.1);opacity:1}}
+      <div className="progress-wrap">
+        <div className="progress-fill" style={{ width: `${progress}%` }} />
+      </div>
+
+      <style>{`
+        .orb { position: fixed; width: 320px; height: 320px; border-radius: 50%; filter: blur(40px); animation: orbPulse 6s ease-in-out infinite; }
+        .orb-1 { left: -100px; top: -80px; background: rgba(123,47,255,0.25); }
+        .orb-2 { right: -120px; bottom: -100px; background: rgba(0,194,255,0.18); animation-delay: 1.6s; }
+        .ring { position: absolute; inset: 0; border-radius: 9999px; }
+        .ring-outer { border: 1px solid rgba(123,47,255,0.35); animation: ringRotate 8s linear infinite; }
+        .ring-outer::after { content: ''; position: absolute; top: -4px; left: 50%; transform: translateX(-50%); width: 10px; height: 10px; border-radius: 9999px; background: linear-gradient(135deg, #7B2FFF, #00C2FF); box-shadow: 0 0 20px rgba(123,47,255,0.8); }
+        .ring-inner { inset: 15px; border: 1px dashed rgba(0,194,255,0.45); animation: ringRotateReverse 5s linear infinite; }
+        .logo-box { position: absolute; inset: 28px; border-radius: 16px; background: linear-gradient(135deg, #7B2FFF, #00C2FF); box-shadow: 0 0 28px rgba(123,47,255,0.5); display: flex; align-items: center; justify-content: center; font-family: Syne, sans-serif; font-size: 32px; font-weight: 800; color: #fff; opacity: ${phase === 'enter' ? 0 : 1}; transform: ${phase === 'enter' ? 'scale(0.9)' : 'scale(1)'}; transition: all 380ms ease; }
+        .letter { font-family: Syne, sans-serif; font-size: 34px; font-weight: 800; opacity: 0; animation: letterReveal 520ms ease forwards; }
+        .progress-wrap { position: fixed; bottom: 80px; width: 200px; height: 6px; border-radius: 9999px; background: rgba(255,255,255,0.06); overflow: hidden; }
+        .progress-fill { height: 100%; border-radius: inherit; background: linear-gradient(135deg, #7B2FFF, #00C2FF); box-shadow: 0 0 14px rgba(123,47,255,0.55); transition: width 120ms linear; }
+        @keyframes ringRotate { to { transform: rotate(360deg);} }
+        @keyframes ringRotateReverse { to { transform: rotate(-360deg);} }
+        @keyframes orbPulse { 0%,100% {transform: scale(1); opacity: .5;} 50% {transform: scale(1.12); opacity: .9;} }
+        @keyframes letterReveal { from {opacity: 0; transform: translateY(8px);} to {opacity: 1; transform: translateY(0);} }
       `}</style>
     </div>
   );
