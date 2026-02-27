@@ -2,7 +2,6 @@ import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { CheckCircle2, Mail, MapPin, Phone } from 'lucide-react';
 
-// ⚠️ REMPLACER CES 3 VALEURS PAR LES CLÉS EMAILJS
 const EMAILJS_SERVICE_ID = 'service_230v0sl';
 const EMAILJS_TEMPLATE_ID = 'template_8eb69bq';
 const EMAILJS_PUBLIC_KEY = 'SloH41wxgblA_mVUn';
