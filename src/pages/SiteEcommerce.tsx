@@ -2,19 +2,15 @@ import { SectionLabel } from '@/components/SectionLabel';
 import { GradientButton } from '@/components/GradientButton';
 import { FAQAccordion } from '@/components/FAQAccordion';
 import { useReveal } from '@/hooks/useReveal';
-import { Check, Clock, Shield, Headphones, ShoppingCart, CreditCard, Package, BarChart3 } from 'lucide-react';
+import { Check, Clock, Shield, Headphones, ShoppingCart, CreditCard, Package, MessageSquare, Palette, Code, Rocket } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { RadialOrbitalTimeline } from '@/components/ui/radial-orbital-timeline';
+import { GlowingEffect } from '@/components/ui/glowing-effect';
 
 const features = [
-  'Tout du Site Vitrine inclus',
-  'Catalogue produits illimité',
-  'Panier d\'achat intuitif',
-  'Paiement sécurisé (Stripe / PayPal)',
-  'Gestion des commandes',
-  'Dashboard administrateur',
-  'Notifications email automatiques',
-  'Gestion des stocks',
-  'Filtres et recherche produits',
+  'Tout du Site Vitrine inclus', 'Catalogue produits illimité', 'Panier d\'achat intuitif',
+  'Paiement sécurisé (Stripe / PayPal)', 'Gestion des commandes', 'Dashboard administrateur',
+  'Notifications email automatiques', 'Gestion des stocks', 'Filtres et recherche produits',
   'Pages produits optimisées SEO',
 ];
 
@@ -22,6 +18,13 @@ const timeline = [
   { icon: ShoppingCart, title: 'Jour 1-5', desc: 'Configuration boutique, design et catalogue produits.' },
   { icon: CreditCard, title: 'Jour 6-14', desc: 'Intégration paiement, panier et gestion commandes.' },
   { icon: Package, title: 'Jour 15-21', desc: 'Tests, optimisation et mise en ligne de votre boutique.' },
+];
+
+const processData = [
+  { id: 1, title: "Échange", date: "Étape 1", content: "Nous discutons de votre projet, vos objectifs et vos besoins pour définir la solution idéale.", category: "Discovery", icon: MessageSquare, status: "completed" as const },
+  { id: 2, title: "Conception", date: "Étape 2", content: "Nous créons la maquette et le design de votre site, validés avec vous avant développement.", category: "Design", icon: Palette, status: "completed" as const },
+  { id: 3, title: "Développement", date: "Étape 3", content: "Votre site est développé avec les meilleures technologies, testé sur tous les appareils.", category: "Dev", icon: Code, status: "in-progress" as const },
+  { id: 4, title: "Livraison", date: "Étape 4", content: "Mise en ligne, formation et remise des accès. Votre site est prêt à convertir.", category: "Launch", icon: Rocket, status: "pending" as const },
 ];
 
 const faqItems = [
@@ -39,14 +42,12 @@ const SiteEcommerce = () => {
       <section className="pt-24 pb-16 px-4">
         <div className="container mx-auto max-w-5xl">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-glow bg-gradient-dark text-xs font-body font-semibold uppercase tracking-widest text-cyan mb-6">
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[rgba(123,47,255,0.18)] bg-gradient-dark text-xs font-body font-semibold uppercase tracking-widest text-cyan mb-6">
               <Clock size={12} /> Livraison 14-21 jours ouvrés
             </span>
           </motion.div>
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-            className="font-heading font-extrabold text-[44px] md:text-[68px] leading-[1.05] text-foreground"
-          >
+          <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
+            className="font-heading font-extrabold text-[44px] md:text-[68px] leading-[1.05] text-foreground">
             Votre <span className="text-gradient">boutique en ligne</span> clé en main
           </motion.h1>
           <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}
@@ -80,22 +81,25 @@ const SiteEcommerce = () => {
             </div>
           </div>
           <div className="md:w-[380px]">
-            <div className="sticky top-24 bg-gradient-card border border-glow rounded-2xl p-8 text-center"
-              style={{ animation: 'pulsGlow 3s ease-in-out infinite' }}>
-              <span className="inline-block px-4 py-1 rounded-full bg-gradient-primary text-xs font-body font-semibold text-foreground mb-6">
-                OFFRE DE LANCEMENT EXCLUSIVE
-              </span>
-              <div className="mb-6">
-                <span className="font-heading font-extrabold text-[80px] leading-none text-foreground">747</span>
-                <span className="text-gradient text-4xl font-heading font-extrabold"> €</span>
+            <div className="sticky top-24 relative rounded-2xl">
+              <GlowingEffect spread={50} glow proximity={80} />
+              <div className="bg-gradient-card border border-[rgba(123,47,255,0.18)] rounded-2xl p-8 text-center"
+                style={{ animation: 'pulsGlow 3s ease-in-out infinite' }}>
+                <span className="inline-block px-4 py-1 rounded-full bg-gradient-primary text-xs font-body font-semibold text-foreground mb-6">
+                  OFFRE DE LANCEMENT EXCLUSIVE
+                </span>
+                <div className="mb-6">
+                  <span className="font-heading font-extrabold text-[80px] leading-none text-foreground">747</span>
+                  <span className="text-gradient text-4xl font-heading font-extrabold"> €</span>
+                </div>
+                <div className="flex flex-col gap-3 mb-8 text-sm text-muted-foreground">
+                  <div className="flex items-center justify-center gap-2"><Clock size={14} className="text-violet" /> Livraison 14-21 jours</div>
+                  <div className="flex items-center justify-center gap-2"><Headphones size={14} className="text-violet" /> Support inclus</div>
+                  <div className="flex items-center justify-center gap-2"><Shield size={14} className="text-violet" /> Devis gratuit</div>
+                </div>
+                <GradientButton to="/contact?type=ecommerce" className="w-full">Lancer ma boutique →</GradientButton>
+                <p className="mt-4 text-xs text-muted-foreground">Paiement 50% commande, 50% livraison</p>
               </div>
-              <div className="flex flex-col gap-3 mb-8 text-sm text-muted-foreground">
-                <div className="flex items-center justify-center gap-2"><Clock size={14} className="text-violet" /> Livraison 14-21 jours</div>
-                <div className="flex items-center justify-center gap-2"><Headphones size={14} className="text-violet" /> Support inclus</div>
-                <div className="flex items-center justify-center gap-2"><Shield size={14} className="text-violet" /> Devis gratuit</div>
-              </div>
-              <GradientButton to="/contact?type=ecommerce" className="w-full">Lancer ma boutique →</GradientButton>
-              <p className="mt-4 text-xs text-muted-foreground">Paiement 50% commande, 50% livraison</p>
             </div>
           </div>
         </div>
@@ -116,13 +120,26 @@ const SiteEcommerce = () => {
                 <div className="w-14 h-14 rounded-2xl bg-gradient-dark flex items-center justify-center flex-shrink-0">
                   <t.icon size={22} className="text-violet" />
                 </div>
-                <div className="bg-gradient-card border border-glow rounded-2xl p-6 flex-1 card-lift">
+                <div className="bg-gradient-card border border-[rgba(123,47,255,0.18)] rounded-2xl p-6 flex-1 card-lift">
                   <h3 className="font-heading font-semibold text-lg text-foreground mb-1">{t.title}</h3>
                   <p className="text-sm text-muted-foreground">{t.desc}</p>
                 </div>
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Processus — RadialOrbitalTimeline */}
+      <section className="py-24 px-4">
+        <div className="container mx-auto max-w-5xl">
+          <div className="text-center mb-16">
+            <SectionLabel>Notre méthode</SectionLabel>
+            <h2 className="font-heading font-bold text-3xl md:text-4xl text-foreground mt-4">
+              Notre Méthode en <span className="text-gradient">4 Étapes</span>
+            </h2>
+          </div>
+          <RadialOrbitalTimeline items={processData} />
         </div>
       </section>
 

@@ -4,6 +4,8 @@ import { SectionLabel } from '@/components/SectionLabel';
 import { useReveal } from '@/hooks/useReveal';
 import { Mail, Phone, Clock, Check, Loader2, Shield, Zap, Headphones } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { ThermodynamicGrid } from '@/components/ui/thermodynamic-grid';
+import { GlowingEffect } from '@/components/ui/glowing-effect';
 
 const typeOptions = [
   { value: '', label: 'Sélectionnez un type de projet' },
@@ -29,12 +31,7 @@ const Contact = () => {
   const [searchParams] = useSearchParams();
   const [formState, setFormState] = useState<'idle' | 'loading' | 'success'>('idle');
   const [form, setForm] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    type: '',
-    message: '',
+    firstName: '', lastName: '', email: '', phone: '', type: '', message: '',
   });
 
   const formReveal = useReveal(0.1);
@@ -42,11 +39,7 @@ const Contact = () => {
   useEffect(() => {
     const type = searchParams.get('type') || '';
     if (type && typeOptions.some(o => o.value === type)) {
-      setForm(f => ({
-        ...f,
-        type,
-        message: defaultMessages[type] || '',
-      }));
+      setForm(f => ({ ...f, type, message: defaultMessages[type] || '' }));
     }
   }, [searchParams]);
 
@@ -56,12 +49,17 @@ const Contact = () => {
     setTimeout(() => setFormState('success'), 1500);
   };
 
-  const inputClasses = 'w-full bg-bg-card border border-glow rounded-xl px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-violet transition-colors font-body';
+  const inputClasses = 'w-full bg-bg-card border border-[rgba(123,47,255,0.18)] rounded-xl px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-violet transition-colors font-body';
 
   return (
     <div className="relative">
-      <section className="pt-24 pb-20 px-4">
-        <div className="container mx-auto max-w-5xl">
+      <section className="pt-24 pb-20 px-4 relative">
+        {/* ThermodynamicGrid background */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-auto">
+          <ThermodynamicGrid resolution={18} coolingFactor={0.97} />
+        </div>
+
+        <div className="container mx-auto max-w-5xl relative z-10">
           <div className="flex flex-col md:flex-row gap-12" ref={formReveal.ref} style={formReveal.style}>
             {/* Left */}
             <div className="md:w-[40%]">
@@ -98,12 +96,13 @@ const Contact = () => {
 
             {/* Right - Form */}
             <div className="md:w-[60%]">
-              <div className="bg-gradient-card border border-glow rounded-2xl p-8">
+              <div className="bg-gradient-card border border-[rgba(123,47,255,0.18)] rounded-2xl p-8 backdrop-blur-sm relative overflow-hidden">
+                <GlowingEffect spread={40} glow proximity={70} />
                 {formState === 'success' ? (
                   <motion.div
                     initial={{ scale: 0.8, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
-                    className="flex flex-col items-center justify-center py-16 text-center"
+                    className="flex flex-col items-center justify-center py-16 text-center relative z-10"
                   >
                     <div className="w-16 h-16 rounded-full bg-success/20 flex items-center justify-center mb-6">
                       <Check size={32} className="text-success" />
@@ -112,59 +111,29 @@ const Contact = () => {
                     <p className="text-sm text-muted-foreground">Nous vous répondrons sous 24h.</p>
                   </motion.div>
                 ) : (
-                  <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+                  <form onSubmit={handleSubmit} className="flex flex-col gap-5 relative z-10">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <input
-                        type="text" placeholder="Prénom" required
-                        className={inputClasses}
-                        value={form.firstName}
-                        onChange={e => setForm(f => ({ ...f, firstName: e.target.value }))}
-                      />
-                      <input
-                        type="text" placeholder="Nom" required
-                        className={inputClasses}
-                        value={form.lastName}
-                        onChange={e => setForm(f => ({ ...f, lastName: e.target.value }))}
-                      />
+                      <input type="text" placeholder="Prénom" required className={inputClasses}
+                        value={form.firstName} onChange={e => setForm(f => ({ ...f, firstName: e.target.value }))} />
+                      <input type="text" placeholder="Nom" required className={inputClasses}
+                        value={form.lastName} onChange={e => setForm(f => ({ ...f, lastName: e.target.value }))} />
                     </div>
-                    <input
-                      type="email" placeholder="Email" required
-                      className={inputClasses}
-                      value={form.email}
-                      onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-                    />
-                    <input
-                      type="tel" placeholder="Téléphone"
-                      className={inputClasses}
-                      value={form.phone}
-                      onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
-                    />
-                    <select
-                      className={`${inputClasses} appearance-none`}
-                      value={form.type}
-                      onChange={e => setForm(f => ({ ...f, type: e.target.value }))}
-                    >
-                      {typeOptions.map(o => (
-                        <option key={o.value} value={o.value}>{o.label}</option>
-                      ))}
+                    <input type="email" placeholder="Email" required className={inputClasses}
+                      value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} />
+                    <input type="tel" placeholder="Téléphone" className={inputClasses}
+                      value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} />
+                    <select className={`${inputClasses} appearance-none`} value={form.type}
+                      onChange={e => setForm(f => ({ ...f, type: e.target.value }))}>
+                      {typeOptions.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
                     </select>
-                    <textarea
-                      placeholder="Décrivez votre projet..." rows={5} required
-                      className={`${inputClasses} resize-none`}
-                      style={{ minHeight: 180 }}
-                      value={form.message}
-                      onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
-                    />
-                    <button
-                      type="submit"
-                      disabled={formState === 'loading'}
-                      className="w-full py-4 rounded-xl bg-gradient-primary font-body font-semibold text-foreground hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2"
-                    >
+                    <textarea placeholder="Décrivez votre projet..." rows={5} required
+                      className={`${inputClasses} resize-none`} style={{ minHeight: 180 }}
+                      value={form.message} onChange={e => setForm(f => ({ ...f, message: e.target.value }))} />
+                    <button type="submit" disabled={formState === 'loading'}
+                      className="w-full py-4 rounded-xl bg-gradient-primary font-body font-semibold text-foreground hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2">
                       {formState === 'loading' ? (
                         <><Loader2 size={18} className="animate-spin" /> Envoi en cours...</>
-                      ) : (
-                        'Envoyer ma demande →'
-                      )}
+                      ) : 'Envoyer ma demande →'}
                     </button>
                   </form>
                 )}
