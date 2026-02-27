@@ -1,133 +1,114 @@
-import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Link, useLocation } from "react-router-dom";
-import { LucideIcon, Menu, X } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { useEffect, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Link, useLocation } from 'react-router-dom';
+import { Home, Layers, Euro, HelpCircle, LucideIcon, Menu, X } from 'lucide-react';
 
-interface NavItem { name: string; url: string; icon: LucideIcon }
+interface NavItem {
+  name: string;
+  url: string;
+  icon: LucideIcon;
+}
 
-export function TubelightNavBar({ items }: { items: NavItem[] }) {
+export function TubelightNavBar() {
   const location = useLocation();
-  const [active, setActive] = useState(items[0].name);
   const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    const match = items.find(i => location.pathname === i.url || (i.url !== '/' && location.pathname.startsWith(i.url)));
-    if (match) setActive(match.name);
-  }, [location.pathname, items]);
+  const items: NavItem[] = [
+    { name: 'Accueil', url: '/', icon: Home },
+    { name: 'Services', url: '/services', icon: Layers },
+    { name: 'Tarifs', url: '/tarifs', icon: Euro },
+    { name: 'Pourquoi un site ?', url: '/pourquoi-un-site', icon: HelpCircle },
+  ];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
+    onScroll();
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   useEffect(() => {
-    setMenuOpen(false);
+    setOpen(false);
   }, [location.pathname]);
 
   return (
-    <nav className="sticky top-0 z-50">
-      <div className={cn(
-        "h-[72px] flex items-center transition-all duration-300",
-        scrolled
-          ? "bg-[rgba(3,3,10,0.85)] backdrop-blur-2xl border-b border-[rgba(123,47,255,0.15)]"
-          : "bg-transparent"
-      )}>
-        <div className="container mx-auto flex items-center justify-between">
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-9 h-9 rounded-lg bg-gradient-primary flex items-center justify-center font-heading font-extrabold text-sm text-foreground shadow-[0_0_20px_rgba(123,47,255,0.3)]">
-              A
-            </div>
-            <span className="font-heading font-extrabold text-xl text-foreground tracking-tight">
-              ALT<span className="text-gradient">É</span>RA
-            </span>
+    <header className="fixed top-0 left-0 right-0 z-50">
+      <nav
+        className={`mx-auto mt-3 w-[min(1100px,calc(100%-1.2rem))] rounded-2xl border transition-all duration-300 ${
+          scrolled
+            ? 'backdrop-blur-[24px] bg-[rgba(3,3,10,0.88)] border-[rgba(123,47,255,0.18)]'
+            : 'bg-transparent border-transparent'
+        }`}
+      >
+        <div className="h-[72px] px-4 md:px-6 flex items-center justify-between gap-3">
+          <Link to="/" className="flex items-center gap-3">
+            <div className="h-9 w-9 rounded-[10px] bg-gradient-to-br from-[#7B2FFF] to-[#00C2FF] shadow-[0_0_20px_rgba(123,47,255,.45)]" />
+            <span className="font-heading font-extrabold text-white tracking-tight text-xl">ALTÉRA</span>
           </Link>
 
-          {/* Desktop nav */}
-          <div className="hidden md:flex items-center gap-1">
+          <div className="hidden md:flex items-center gap-1 relative">
             {items.map((item) => {
-              const isActive = active === item.name;
+              const active = location.pathname === item.url;
               return (
-                <Link
-                  key={item.name}
-                  to={item.url}
-                  onClick={() => setActive(item.name)}
-                  className={cn(
-                    "relative px-5 py-2 rounded-full text-sm font-body font-medium transition-colors duration-200",
-                    isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground"
-                  )}
-                >
-                  {item.name}
-                  {isActive && (
+                <Link key={item.url} to={item.url} className="relative px-4 py-2 rounded-full text-sm text-white/80 hover:text-white transition-colors">
+                  {active && (
                     <motion.div
-                      layoutId="tubelight"
-                      className="absolute inset-0 rounded-full -z-10"
-                      transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
+                      layoutId="lamp"
+                      transition={{ type: 'spring', stiffness: 350, damping: 35 }}
+                      className="absolute inset-0 rounded-full"
                     >
-                      {/* Glow bar top */}
-                      <div className="absolute -top-[1px] left-1/2 -translate-x-1/2 w-8 h-[2px] rounded-full bg-violet shadow-[0_0_10px_rgba(123,47,255,0.6),0_0_30px_rgba(123,47,255,0.3)]" />
-                      {/* Background pill */}
-                      <div className="absolute inset-0 rounded-full bg-[rgba(123,47,255,0.08)] border border-[rgba(123,47,255,0.15)]" />
+                      <div className="absolute inset-0 rounded-full bg-[rgba(123,47,255,0.15)]" />
+                      <div
+                        className="absolute -top-[3px] left-1/2 -translate-x-1/2 h-[3px] w-14 rounded-full bg-gradient-to-r from-[#7B2FFF] to-[#00C2FF]"
+                        style={{ boxShadow: '0 0 12px #7B2FFF, 0 0 24px rgba(123,47,255,0.4)' }}
+                      />
+                      <div className="absolute -top-4 left-1/2 -translate-x-1/2 h-5 w-20 bg-[rgba(123,47,255,0.15)] blur-[8px]" />
                     </motion.div>
                   )}
+                  <span className="relative z-10">{item.name}</span>
                 </Link>
               );
             })}
           </div>
 
-          {/* CTA + Mobile */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <Link
               to="/contact"
-              className="hidden md:inline-flex px-6 py-2.5 rounded-full bg-gradient-primary text-sm font-body font-semibold text-foreground hover:opacity-90 transition-all duration-200 shadow-[0_4px_20px_rgba(123,47,255,0.3)] hover:shadow-[0_8px_30px_rgba(123,47,255,0.5)] hover:-translate-y-[2px]"
+              className="hidden md:inline-flex rounded-full px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-[#7B2FFF] to-[#00C2FF] shadow-[0_10px_30px_rgba(123,47,255,.35)]"
             >
               Devis gratuit
             </Link>
-            <button
-              className="md:hidden text-foreground"
-              onClick={() => setMenuOpen(!menuOpen)}
-            >
-              {menuOpen ? <X size={24} /> : <Menu size={24} />}
+            <button className="md:hidden text-white" onClick={() => setOpen((s) => !s)}>
+              {open ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
         </div>
-      </div>
 
-      {/* Mobile menu */}
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="absolute top-[72px] left-0 right-0 bg-[rgba(3,3,10,0.95)] backdrop-blur-2xl border-b border-[rgba(123,47,255,0.15)] p-6 flex flex-col gap-2 md:hidden"
-          >
-            {items.map(item => (
-              <Link
-                key={item.name}
-                to={item.url}
-                onClick={() => { setActive(item.name); setMenuOpen(false); }}
-                className={cn(
-                  "py-3 text-sm font-body font-medium border-b border-[rgba(255,255,255,0.05)]",
-                  active === item.name ? "text-foreground" : "text-muted-foreground"
-                )}
-              >
-                {item.name}
-              </Link>
-            ))}
-            <Link
-              to="/contact"
-              onClick={() => setMenuOpen(false)}
-              className="mt-4 text-center px-6 py-3 rounded-xl bg-gradient-primary text-sm font-semibold text-foreground"
+        <AnimatePresence>
+          {open && (
+            <motion.div
+              initial={{ opacity: 0, y: -12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              className="md:hidden px-4 pb-4 flex flex-col gap-2"
             >
-              Devis gratuit
-            </Link>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </nav>
+              {items.map((item) => (
+                <Link
+                  key={item.url}
+                  to={item.url}
+                  className={`rounded-xl px-4 py-3 text-sm ${location.pathname === item.url ? 'bg-[rgba(123,47,255,0.14)] text-white' : 'text-white/75'}`}
+                >
+                  {item.name}
+                </Link>
+              ))}
+              <Link to="/contact" className="mt-2 rounded-xl px-4 py-3 text-sm font-semibold text-white bg-gradient-to-r from-[#7B2FFF] to-[#00C2FF]">
+                Devis gratuit
+              </Link>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </nav>
+    </header>
   );
 }
