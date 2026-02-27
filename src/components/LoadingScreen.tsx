@@ -1,169 +1,95 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
-export default function LoadingScreen({ onComplete }: { onComplete: () => void }) {
+interface Props {
+  onComplete: () => void;
+}
+
+export default function LoadingScreen({ onComplete }: Props) {
   const [phase, setPhase] = useState<'enter' | 'pulse' | 'exit'>('enter');
   const [progress, setProgress] = useState(0);
+  const letters = useMemo(() => ['A', 'L', 'T', 'É', 'R', 'A'], []);
 
   useEffect(() => {
-    const t1 = setTimeout(() => setPhase('pulse'), 600);
-
-    const interval = setInterval(() => {
-      setProgress(prev => {
-        if (prev >= 100) { clearInterval(interval); return 100; }
-        return prev + 2;
-      });
+    const pulseTimer = window.setTimeout(() => setPhase('pulse'), 600);
+    const progressInterval = window.setInterval(() => {
+      setProgress((prev) => Math.min(100, prev + 2));
     }, 30);
+    const exitTimer = window.setTimeout(() => setPhase('exit'), 1800);
+    const completeTimer = window.setTimeout(onComplete, 2200);
 
-    const t2 = setTimeout(() => setPhase('exit'), 1800);
-    const t3 = setTimeout(() => onComplete(), 2200);
-
-    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearInterval(interval); };
+    return () => {
+      clearTimeout(pulseTimer);
+      clearTimeout(exitTimer);
+      clearTimeout(completeTimer);
+      clearInterval(progressInterval);
+    };
   }, [onComplete]);
 
   return (
     <div
       style={{
-        position: 'fixed', inset: 0, zIndex: 9999,
+        position: 'fixed',
+        inset: 0,
+        zIndex: 100,
         background: '#03030A',
-        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column',
+        transition: 'opacity 380ms ease, transform 420ms ease',
         opacity: phase === 'exit' ? 0 : 1,
-        transition: 'opacity 0.4s ease',
-        pointerEvents: phase === 'exit' ? 'none' : 'all',
+        transform: phase === 'exit' ? 'scale(1.04)' : 'scale(1)',
       }}
     >
-      {/* Orbes cosmiques */}
-      <div style={{
-        position: 'absolute', top: '20%', left: '30%', width: 300, height: 300,
-        borderRadius: '50%', filter: 'blur(120px)', opacity: 0.4,
-        background: 'radial-gradient(circle, rgba(123,47,255,0.4), transparent 70%)',
-        animation: 'orbPulse 4s ease-in-out infinite',
-      }} />
-      <div style={{
-        position: 'absolute', bottom: '20%', right: '25%', width: 250, height: 250,
-        borderRadius: '50%', filter: 'blur(100px)', opacity: 0.3,
-        background: 'radial-gradient(circle, rgba(0,194,255,0.3), transparent 70%)',
-        animation: 'orbPulse 5s ease-in-out infinite 1s',
-      }} />
+      <div className="orb orb-1" />
+      <div className="orb orb-2" />
 
-      {/* Logo central */}
-      <div style={{
-        opacity: phase === 'enter' ? 0 : 1,
-        transform: phase === 'enter' ? 'scale(0.8)' : 'scale(1)',
-        transition: 'all 0.6s cubic-bezier(0.22,1,0.36,1)',
-        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 24,
-      }}>
-        {/* Icône avec rings */}
-        <div style={{ position: 'relative', width: 120, height: 120 }}>
-          {/* Ring externe */}
-          <div style={{
-            position: 'absolute', inset: -10, borderRadius: '50%',
-            border: '1px solid rgba(123,47,255,0.3)',
-            animation: 'ringRotate 8s linear infinite',
-          }}>
-            <div style={{
-              position: 'absolute', top: -4, left: '50%', transform: 'translateX(-50%)',
-              width: 8, height: 8, borderRadius: '50%',
-              background: '#7B2FFF', boxShadow: '0 0 12px rgba(123,47,255,0.8)',
-            }} />
-          </div>
-
-          {/* Ring interne */}
-          <div style={{
-            position: 'absolute', inset: -24, borderRadius: '50%',
-            border: '1px solid rgba(0,194,255,0.2)',
-            animation: 'ringRotateReverse 12s linear infinite',
-          }} />
-
-          {/* Glow */}
-          <div style={{
-            position: 'absolute', inset: -20, borderRadius: '50%', filter: 'blur(40px)',
-            background: 'radial-gradient(circle, rgba(123,47,255,0.3), transparent 70%)',
-            animation: 'logoPulse 2s ease-in-out infinite',
-          }} />
-
-          {/* Carré gradient */}
-          <div style={{
-            position: 'absolute', inset: 0,
-            borderRadius: 24,
-            background: 'linear-gradient(135deg, #7B2FFF, #00C2FF)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontFamily: 'Syne', fontWeight: 800, fontSize: 52, color: 'white',
-            boxShadow: '0 0 60px rgba(123,47,255,0.4)',
-          }}>
-            A
-          </div>
-        </div>
-
-        {/* Lettres ALTÉRA */}
-        <div style={{ display: 'flex', gap: 4 }}>
-          {['A','L','T','É','R','A'].map((letter, i) => (
-            <span key={i} style={{
-              fontFamily: 'Syne', fontWeight: 800, fontSize: 36, color: 'white',
-              opacity: 0, animation: `letterReveal 0.4s ease forwards ${0.6 + i * 0.08}s`,
-            }}>
-              {letter}
-            </span>
-          ))}
-        </div>
-
-        {/* Tagline */}
-        <span style={{
-          fontFamily: 'DM Sans', fontSize: 14, fontWeight: 500,
-          color: 'rgba(255,255,255,0.5)', letterSpacing: '0.2em', textTransform: 'uppercase',
-          opacity: 0, animation: 'fadeInUp 0.5s ease forwards 1.2s',
-        }}>
-          Agence Web Premium
-        </span>
+      <div style={{ position: 'relative', width: 120, height: 120, marginBottom: 28 }}>
+        <div className="ring ring-outer" />
+        <div className="ring ring-inner" />
+        <div className="logo-box">A</div>
       </div>
 
-      {/* Barre de progression */}
-      <div style={{
-        position: 'absolute', bottom: 80, left: '50%', transform: 'translateX(-50%)',
-        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12,
-      }}>
-        <div style={{
-          width: 200, height: 3, borderRadius: 4,
-          background: 'rgba(255,255,255,0.08)', overflow: 'hidden',
-        }}>
-          <div style={{
-            height: '100%', borderRadius: 4,
-            background: 'linear-gradient(90deg, #7B2FFF, #00C2FF)',
-            width: `${progress}%`, transition: 'width 0.1s linear',
-          }} />
-        </div>
-        <span style={{
-          fontFamily: 'DM Sans', fontSize: 12, fontWeight: 500,
-          color: 'rgba(255,255,255,0.35)',
-        }}>
-          {progress < 100 ? `${progress}%` : 'Prêt'}
-        </span>
+      <div style={{ display: 'flex', gap: 2, marginBottom: 8 }}>
+        {letters.map((letter, index) => (
+          <span
+            key={letter + index}
+            className="letter"
+            style={{
+              animationDelay: `${index * 120}ms`,
+              color: letter === 'É' ? 'transparent' : '#FFF',
+              background: letter === 'É' ? 'linear-gradient(135deg, #7B2FFF, #00C2FF)' : 'none',
+              WebkitBackgroundClip: letter === 'É' ? 'text' : 'initial',
+            }}
+          >
+            {letter}
+          </span>
+        ))}
+      </div>
+      <p style={{ color: 'rgba(255,255,255,0.3)', letterSpacing: '0.24em', fontSize: 11, fontFamily: 'DM Sans, sans-serif' }}>
+        Agence Web Premium
+      </p>
+
+      <div className="progress-wrap">
+        <div className="progress-fill" style={{ width: `${progress}%` }} />
       </div>
 
       <style>{`
-        @keyframes letterReveal {
-          from { opacity: 0; transform: translateY(16px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(12px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes logoPulse {
-          0%,100% { transform: scale(1); opacity: 0.6; }
-          50%     { transform: scale(1.4); opacity: 1; }
-        }
-        @keyframes ringRotate {
-          from { transform: rotate(0deg); }
-          to   { transform: rotate(360deg); }
-        }
-        @keyframes ringRotateReverse {
-          from { transform: rotate(0deg); }
-          to   { transform: rotate(-360deg); }
-        }
-        @keyframes orbPulse {
-          0%,100% { opacity: 0.6; transform: scale(1); }
-          50%     { opacity: 1; transform: scale(1.1); }
-        }
+        .orb { position: fixed; width: 320px; height: 320px; border-radius: 50%; filter: blur(40px); animation: orbPulse 6s ease-in-out infinite; }
+        .orb-1 { left: -100px; top: -80px; background: rgba(123,47,255,0.25); }
+        .orb-2 { right: -120px; bottom: -100px; background: rgba(0,194,255,0.18); animation-delay: 1.6s; }
+        .ring { position: absolute; inset: 0; border-radius: 9999px; }
+        .ring-outer { border: 1px solid rgba(123,47,255,0.35); animation: ringRotate 8s linear infinite; }
+        .ring-outer::after { content: ''; position: absolute; top: -4px; left: 50%; transform: translateX(-50%); width: 10px; height: 10px; border-radius: 9999px; background: linear-gradient(135deg, #7B2FFF, #00C2FF); box-shadow: 0 0 20px rgba(123,47,255,0.8); }
+        .ring-inner { inset: 15px; border: 1px dashed rgba(0,194,255,0.45); animation: ringRotateReverse 5s linear infinite; }
+        .logo-box { position: absolute; inset: 28px; border-radius: 16px; background: linear-gradient(135deg, #7B2FFF, #00C2FF); box-shadow: 0 0 28px rgba(123,47,255,0.5); display: flex; align-items: center; justify-content: center; font-family: Syne, sans-serif; font-size: 32px; font-weight: 800; color: #fff; opacity: ${phase === 'enter' ? 0 : 1}; transform: ${phase === 'enter' ? 'scale(0.9)' : 'scale(1)'}; transition: all 380ms ease; }
+        .letter { font-family: Syne, sans-serif; font-size: 34px; font-weight: 800; opacity: 0; animation: letterReveal 520ms ease forwards; }
+        .progress-wrap { position: fixed; bottom: 80px; width: 200px; height: 6px; border-radius: 9999px; background: rgba(255,255,255,0.06); overflow: hidden; }
+        .progress-fill { height: 100%; border-radius: inherit; background: linear-gradient(135deg, #7B2FFF, #00C2FF); box-shadow: 0 0 14px rgba(123,47,255,0.55); transition: width 120ms linear; }
+        @keyframes ringRotate { to { transform: rotate(360deg);} }
+        @keyframes ringRotateReverse { to { transform: rotate(-360deg);} }
+        @keyframes orbPulse { 0%,100% {transform: scale(1); opacity: .5;} 50% {transform: scale(1.12); opacity: .9;} }
+        @keyframes letterReveal { from {opacity: 0; transform: translateY(8px);} to {opacity: 1; transform: translateY(0);} }
       `}</style>
     </div>
   );
