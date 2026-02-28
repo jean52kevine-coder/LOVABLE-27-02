@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-body { background: #03030A; margin: 0; font-family: 'DM Sans', sans-serif; color: white; -webkit-font-smoothing: antialiased; }
+body { background: #03030A; margin: 0; overflow-x: hidden; font-family: 'DM Sans', sans-serif; color: white; -webkit-font-smoothing: antialiased; }
 * { box-sizing: border-box; }
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: #03030A; }

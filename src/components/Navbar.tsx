@@ -99,8 +99,8 @@ export default function Navbar() {
       </header>
 
       {/* ═══ MOBILE : Nav icones en bas ═══ */}
-      <nav className="flex md:hidden" style={{ position:'fixed', bottom:0, left:0, right:0, zIndex:100, padding:'10px 8px 20px', background:'rgba(3,3,10,0.95)', backdropFilter:'blur(24px)', borderTop:'1px solid rgba(123,47,255,0.13)' }}>
-        <div style={{ display:'flex', justifyContent:'space-around', alignItems:'center', width:'100%', background:'rgba(255,255,255,0.03)', border:'1px solid rgba(255,255,255,0.06)', borderRadius:'999px', padding:'6px' }}>
+      <nav className="flex md:hidden" style={{ position:'fixed', bottom:10, left:12, right:12, zIndex:100, padding:'0', background:'transparent' }}>
+        <div style={{ display:'flex', justifyContent:'space-around', alignItems:'center', width:'100%', background:'rgba(7,10,22,0.65)', border:'1px solid rgba(255,255,255,0.12)', borderRadius:'999px', padding:'7px', backdropFilter:'blur(22px)', boxShadow:'0 12px 30px rgba(0,0,0,0.35)' }}>
           {NAV_ITEMS.map(item => {
             const Icon = item.icon;
             const isActive = active === item.name;
@@ -117,7 +117,7 @@ export default function Navbar() {
 
       {/* Spacers */}
       <div className="hidden md:block" style={{ height:'72px' }}/>
-      <div className="flex md:hidden" style={{ height:'60px' }}/>
+      <div className="flex md:hidden" style={{ height:'86px' }}/>
     </>
   );
 }
