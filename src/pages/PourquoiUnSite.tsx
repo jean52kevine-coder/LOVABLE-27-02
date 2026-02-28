@@ -1,106 +1,79 @@
-import { SectionLabel } from '@/components/SectionLabel';
-import { GradientButton } from '@/components/GradientButton';
-import { useReveal } from '@/hooks/useReveal';
-import { useCountUp } from '@/hooks/useCountUp';
-import { Eye, Award, TrendingUp, Smartphone } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import HeroBackground from '@/components/HeroBackground';
 
-const stats = [
-  { value: 81, suffix: '%', label: 'des consommateurs recherchent en ligne avant d\'acheter' },
-  { value: 46, suffix: '%', label: 'des recherches Google sont locales' },
-  { value: 75, suffix: '%', label: 'jugent la crédibilité sur le design du site' },
-  { value: 90, suffix: '%', label: 'des interactions commencent sur mobile' },
+const STATS = [
+  { value: '4,6×', label: 'Plus de prospects', detail: 'Un site bien référencé génère en moyenne 4,6× plus de contacts que le bouche-à-oreille seul.' },
+  { value: '81%', label: 'Vérifient en ligne', detail: "Des consommateurs vérifient la présence en ligne d'un commerce avant de s'y rendre." },
+  { value: '14j', label: 'Pour être en ligne', detail: 'Délai de livraison ALTÉRA garanti. Vous commencez à générer des clients en 2 semaines.' },
+  { value: '4-6m', label: 'Retour sur invest.', detail: 'Nos clients récupèrent leur investissement en 4 à 6 mois grâce aux nouveaux contacts générés.' },
 ];
 
-const pillars = [
-  { icon: Eye, title: 'Visibilité Absolue', desc: 'Soyez trouvé par vos clients potentiels 24h/24 sur Google et les réseaux.' },
-  { icon: Award, title: 'Crédibilité Instantanée', desc: 'Un site professionnel inspire confiance et démarque votre activité de la concurrence.' },
-  { icon: TrendingUp, title: 'Croissance Organique', desc: 'Générez des leads qualifiés sans dépendre uniquement de la publicité payante.' },
-  { icon: Smartphone, title: 'Expérience Mobile-First', desc: 'Offrez une navigation parfaite sur tous les appareils pour ne perdre aucun visiteur.' },
+const sectors = [
+  { name: 'Artisan', problem: 'Dépendance au bouche-à-oreille.', answer: 'Un site avec galerie + avis augmente votre crédibilité locale.', stat: '+42% d\'appels qualifiés' },
+  { name: 'Restaurant', problem: 'Clients perdus sans menu ni réservation en ligne.', answer: 'Page menu mobile + réservation rapide depuis Google.', stat: '+37% de réservations' },
+  { name: 'Commerce', problem: 'Horaires et produits difficiles à trouver.', answer: 'Fiche locale optimisée et pages produits attractives.', stat: '+2.8x de visites en magasin' },
+  { name: 'Profession libérale', problem: 'Image peu professionnelle sans vitrine digitale.', answer: 'Positionnement expert + prise de rendez-vous automatisée.', stat: '+55% de demandes de contact' },
 ];
 
-const StatCounter = ({ value, suffix, label }: { value: number; suffix: string; label: string }) => {
-  const { count, ref } = useCountUp(value);
-  return (
-    <div ref={ref} className="text-center">
-      <span className="font-heading font-extrabold text-[56px] md:text-[88px] leading-none text-gradient">
-        {count}{suffix}
-      </span>
-      <p className="mt-3 text-sm text-muted-foreground max-w-[200px] mx-auto">{label}</p>
-    </div>
-  );
-};
-
-const PourquoiUnSite = () => {
-  const pillarsReveal = useReveal(0.1);
+export default function PourquoiUnSite() {
+  const [active, setActive] = useState(0);
 
   return (
-    <div className="relative">
-      {/* Hero */}
-      <section className="pt-24 pb-16 px-4 text-center">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-glow bg-gradient-dark text-xs font-body font-semibold uppercase tracking-widest text-violet mb-6">
-            Votre avantage digital
-          </span>
-        </motion.div>
-        <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-          className="font-heading font-extrabold text-[44px] md:text-[68px] leading-[1.05] text-foreground max-w-4xl mx-auto">
-          Pourquoi votre entreprise a <span className="text-gradient">besoin d'un site</span> ?
-        </motion.h1>
-        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}
-          className="mt-6 max-w-lg mx-auto text-lg text-muted-foreground">
-          Les chiffres parlent d'eux-mêmes. Ne laissez pas votre concurrence prendre l'avantage.
-        </motion.p>
+    <main className="pt-[60px] pb-[76px] md:pt-0 md:pb-0">
+      <section style={{ position: 'relative', minHeight: '100vh', display: 'grid', placeItems: 'center', padding: '120px 24px 80px' }}>
+        <HeroBackground variant="pourquoi" />
+        <div style={{ position: 'relative', zIndex: 1, textAlign: 'center', maxWidth: 900 }}>
+          <h1 style={{ fontFamily: 'Syne,sans-serif', fontSize: 'clamp(36px,5.5vw,62px)', marginBottom: 10 }}>Invisible en ligne = client perdu.</h1>
+          <p style={{ color: 'rgba(255,255,255,0.78)' }}>93% des achats commencent par une recherche Google. Où en êtes-vous ?</p>
+        </div>
       </section>
 
-      {/* Stats */}
-      <section className="py-20 px-4">
-        <div className="container mx-auto max-w-5xl">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((s, i) => (
-              <StatCounter key={i} {...s} />
-            ))}
+      <section style={{ maxWidth: 980, margin: '0 auto', padding: '70px 24px', textAlign: 'center' }}>
+        <p style={{ margin: 0, fontFamily: 'Syne,sans-serif', fontWeight: 800, fontSize: 'clamp(72px,18vw,120px)', background: 'linear-gradient(135deg,#7B2FFF,#00C2FF)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>93%</p>
+        <p style={{ color: 'rgba(255,255,255,0.78)', fontSize: 20, margin: '6px 0' }}>des recherches locales commencent sur Google.</p>
+        <p style={{ color: 'rgba(255,255,255,0.78)', margin: 0 }}>Votre concurrent qui a un site capte ces clients.</p>
+      </section>
+
+      <section style={{ maxWidth: 1100, margin: '0 auto', padding: '10px 24px 70px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 14 }}>
+          <div style={{ borderRadius: 16, border: '1px solid rgba(239,68,68,0.3)', background: 'rgba(127,29,29,0.22)', padding: 18 }}>
+            <h3>❌ Sans site web</h3>
+            {['Invisible Google', 'Clients perdus', 'Image amateure', 'Zéro crédibilité', '0€ de CA digital'].map((x) => <p key={x}>{x}</p>)}
+          </div>
+          <div style={{ borderRadius: 16, border: '1px solid rgba(16,185,129,0.35)', background: 'rgba(5,46,22,0.32)', padding: 18 }}>
+            <h3>✅ Avec ALTÉRA</h3>
+            {['1ère page Google', 'Leads 24h/24', 'Image professionnelle', 'Confiance client', '+180% de CA moyen'].map((x) => <p key={x}>{x}</p>)}
           </div>
         </div>
       </section>
 
-      {/* Pillars */}
-      <section className="py-24 px-4" ref={pillarsReveal.ref} style={pillarsReveal.style}>
-        <div className="container mx-auto max-w-4xl">
-          <div className="text-center mb-16">
-            <SectionLabel>Les 4 piliers</SectionLabel>
-            <h2 className="font-heading font-bold text-3xl md:text-4xl text-foreground mt-4">
-              Les raisons <span className="text-gradient">essentielles</span>
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {pillars.map((p, i) => (
-              <div key={i} className="bg-gradient-card border border-glow rounded-2xl p-8 card-lift">
-                <div className="w-12 h-12 rounded-xl bg-gradient-dark flex items-center justify-center mb-5">
-                  <p.icon size={22} className="text-violet" />
-                </div>
-                <h3 className="font-heading font-semibold text-xl text-foreground mb-2">{p.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{p.desc}</p>
-              </div>
-            ))}
-          </div>
+      <section style={{ maxWidth: 1100, margin: '0 auto', padding: '10px 24px 70px' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 14 }}>
+          {sectors.map((sector, i) => (
+            <button key={sector.name} onClick={() => setActive(i)} style={{ border: '1px solid rgba(255,255,255,0.18)', background: active === i ? 'rgba(123,47,255,0.28)' : 'transparent', color: 'white', borderRadius: 999, padding: '8px 14px' }}>{sector.name}</button>
+          ))}
         </div>
+        <AnimatePresence mode="wait">
+          <motion.div key={sectors[active].name} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }} style={{ border: '1px solid rgba(255,255,255,0.1)', borderRadius: 16, padding: 18 }}>
+            <p><strong>Problème :</strong> {sectors[active].problem}</p>
+            <p><strong>Réponse ALTÉRA :</strong> {sectors[active].answer}</p>
+            <p style={{ color: '#00C2FF', marginBottom: 0 }}>{sectors[active].stat}</p>
+          </motion.div>
+        </AnimatePresence>
       </section>
 
-      {/* Citation + CTA */}
-      <section className="py-24 px-4 text-center">
-        <div className="container mx-auto max-w-3xl">
-          <p className="font-heading font-semibold text-2xl md:text-[32px] leading-relaxed text-foreground italic mb-8">
-            «&nbsp;Un site internet n'est pas une dépense, c'est un <span className="text-gradient">investissement</span> dans la croissance de votre entreprise.&nbsp;»
-          </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <GradientButton to="/contact">Démarrer mon projet →</GradientButton>
-            <GradientButton to="/tarifs" variant="outline">Voir les tarifs</GradientButton>
-          </div>
+      <section style={{ maxWidth: 1100, margin: '0 auto', padding: '10px 24px 100px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: 14 }}>
+          {STATS.map((stat) => (
+            <div key={stat.label} style={{ border: '1px solid rgba(255,255,255,0.1)', borderRadius: 14, padding: 14 }}>
+              <p style={{ margin: 0, fontFamily: 'Syne,sans-serif', fontWeight: 800, fontSize: 48 }}>{stat.value}</p>
+              <p style={{ margin: '4px 0', fontWeight: 700 }}>{stat.label}</p>
+              <p style={{ margin: 0, color: 'rgba(255,255,255,0.78)', fontSize: 14 }}>{stat.detail}</p>
+            </div>
+          ))}
         </div>
       </section>
-    </div>
+    </main>
   );
-};
-
-export default PourquoiUnSite;
+}

@@ -13,7 +13,7 @@ const plans = [
   },
   {
     title: 'Professionnelle',
-    price: '44',
+    price: '49',
     unit: '/mois',
     badge: '⭐ RECOMMANDÉ',
     featured: true,
@@ -21,7 +21,7 @@ const plans = [
   },
   {
     title: 'Premium',
-    price: '49',
+    price: '59',
     unit: '/mois',
     features: ['Tout de la Professionnelle', 'Modifications mineures incluses', 'Audit SEO trimestriel', 'Support téléphonique', 'Analyse de performance'],
   },
@@ -38,7 +38,7 @@ const Maintenance = () => {
   const blocksReveal = useReveal(0.1);
 
   return (
-    <div className="relative">
+    <div className="relative pt-[60px] pb-[76px] md:pt-0 md:pb-0">
       {/* Hero */}
       <section className="pt-24 pb-16 px-4 text-center">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
