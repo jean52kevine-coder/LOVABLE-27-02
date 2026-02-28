@@ -94,8 +94,14 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "border-beam": { "100%": { "offset-distance": "100%" } },
+        "meteor-effect": {
+          "0%": { transform: "rotate(215deg) translateX(0)", opacity: "1" },
+          "70%": { opacity: "1" },
+          "100%": { transform: "rotate(215deg) translateX(-500px)", opacity: "0" },
+        },
         "fade-in": {
-          "0%": { opacity: "0", transform: "translateY(10px)" },
+          "0%": { opacity: "0", transform: "translateY(20px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
         float: {
@@ -103,14 +109,16 @@ export default {
           "50%": { transform: "translateY(-10px)" },
         },
         marqueeScroll: {
-          from: { transform: 'translateX(0)' },
-          to: { transform: 'translateX(calc(-50% - 0.75rem))' },
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(calc(-50% - 0.75rem))" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "fade-in": "fade-in 0.5s ease-out",
+        "border-beam": "border-beam calc(var(--duration)*1s) infinite linear",
+        "meteor-effect": "meteor-effect 5s linear infinite",
+        "fade-in": "fade-in 0.6s ease-out forwards",
         float: "float 6s ease-in-out infinite",
         marquee: "marqueeScroll var(--duration, 40s) linear infinite",
       },

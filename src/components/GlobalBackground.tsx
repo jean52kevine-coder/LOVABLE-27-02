@@ -41,7 +41,7 @@ export function GlobalBackground({ variant = 'content' }: GlobalBackgroundProps)
           minDelay={1500}
           maxDelay={4000}
           starWidth={12}
-          starHeight={1.5}
+          starHeight={2.2}
         />
         <ShootingStars
           starColor="#00C2FF"
@@ -51,7 +51,7 @@ export function GlobalBackground({ variant = 'content' }: GlobalBackgroundProps)
           minDelay={2000}
           maxDelay={6000}
           starWidth={8}
-          starHeight={1}
+          starHeight={1.6}
         />
         <div
           style={{
@@ -69,7 +69,7 @@ export function GlobalBackground({ variant = 'content' }: GlobalBackgroundProps)
 
   return (
     <div className="absolute inset-0 overflow-hidden" style={{ zIndex: 0 }}>
-      <StarsBackground className="absolute inset-0" starDensity={0.0001} allStarsTwinkle />
+      <StarsBackground className="absolute inset-0" starDensity={0.00014} allStarsTwinkle />
       <ShootingStars
         starColor="#FFE066"
         trailColor="#FFF4B0"
@@ -77,8 +77,8 @@ export function GlobalBackground({ variant = 'content' }: GlobalBackgroundProps)
         maxSpeed={28}
         minDelay={2000}
         maxDelay={6000}
-        starWidth={14}
-        starHeight={1.5}
+        starWidth={20}
+        starHeight={2.2}
       />
       <ShootingStars
         starColor="#FFFFFF"
@@ -87,8 +87,8 @@ export function GlobalBackground({ variant = 'content' }: GlobalBackgroundProps)
         maxSpeed={22}
         minDelay={3500}
         maxDelay={8000}
-        starWidth={10}
-        starHeight={1}
+        starWidth={14}
+        starHeight={1.6}
       />
     </div>
   );
