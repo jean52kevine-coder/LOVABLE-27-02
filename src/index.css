@@ -2,23 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --violet: #7B2FFF;
-  --cyan: #00C2FF;
-  --bg: #03030A;
-}
-
-body {
-  background: #03030A;
-  margin: 0;
-  font-family: 'DM Sans', sans-serif;
-  color: white;
-  -webkit-font-smoothing: antialiased;
-}
-
+body { background: #03030A; margin: 0; font-family: 'DM Sans', sans-serif; color: white; -webkit-font-smoothing: antialiased; }
 * { box-sizing: border-box; }
-
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: #03030A; }
-::-webkit-scrollbar-thumb { background: rgba(123,47,255,0.35); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(123,47,255,0.6); }
+::-webkit-scrollbar-thumb { background: rgba(123,47,255,0.4); border-radius: 3px; }
