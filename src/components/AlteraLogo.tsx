@@ -4,7 +4,7 @@ interface AlteraLogoProps {
   textSize?: number;
 }
 
-export function AlteraLogo({ size = 36, showText = true, textSize = 20 }: AlteraLogoProps) {
+export function AlteraLogo({ size = 44, showText = true, textSize = 22 }: AlteraLogoProps) {
   const id = `logo-${Math.random().toString(36).slice(2, 7)}`;
 
   return (

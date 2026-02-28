@@ -53,7 +53,7 @@ function App() {
               <BrowserRouter>
                 <ScrollToTop />
                 <Navbar />
-                <main className="pb-[80px] md:pb-0">
+                <main>
                   <Suspense fallback={<Loading />}>
                     <Routes>
                       <Route path="/" element={<Index />} />

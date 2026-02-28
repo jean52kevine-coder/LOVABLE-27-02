@@ -27,231 +27,53 @@ export default function Navbar() {
 
   return (
     <>
-      <nav
-        className="hidden md:flex"
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 100,
-          transition: 'background 350ms ease, border-color 350ms ease, backdrop-filter 350ms ease',
-          background: scrolled ? 'rgba(3,3,10,0.90)' : 'transparent',
-          backdropFilter: scrolled ? 'blur(24px)' : 'none',
-          WebkitBackdropFilter: scrolled ? 'blur(24px)' : 'none',
-          borderBottom: `1px solid ${scrolled ? 'rgba(123,47,255,0.13)' : 'transparent'}`,
-        }}
-      >
-        <div
-          style={{
-            maxWidth: '1200px',
-            margin: '0 auto',
-            padding: '0 48px',
-            height: '70px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            width: '100%',
-          }}
-        >
-          <Link to="/" style={{ textDecoration: 'none', flexShrink: 0 }}>
-            <AlteraLogo size={34} textSize={19} />
+      <nav className="hidden md:flex" style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, background: scrolled ? 'rgba(3,3,10,0.90)' : 'transparent', backdropFilter: scrolled ? 'blur(24px)' : 'none', borderBottom: `1px solid ${scrolled ? 'rgba(123,47,255,0.13)' : 'transparent'}` }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 48px', height: '70px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+          <Link to="/" style={{ textDecoration: 'none' }}>
+            <AlteraLogo size={44} textSize={22} />
           </Link>
 
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '2px',
-              background: 'rgba(255,255,255,0.03)',
-              border: '1px solid rgba(255,255,255,0.07)',
-              borderRadius: '999px',
-              padding: '4px',
-              backdropFilter: 'blur(10px)',
-            }}
-          >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '2px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '999px', padding: '4px' }}>
             {NAV_ITEMS.map((item) => {
               const isActive = active === item.name;
               return (
-                <Link
-                  key={item.name}
-                  to={item.url}
-                  style={{
-                    position: 'relative',
-                    textDecoration: 'none',
-                    padding: '8px 20px',
-                    borderRadius: '999px',
-                    fontFamily: 'DM Sans, sans-serif',
-                    fontWeight: 500,
-                    fontSize: '14px',
-                    color: isActive ? 'white' : 'rgba(255,255,255,0.48)',
-                    transition: 'color 200ms ease',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
+                <Link key={item.name} to={item.url} style={{ position: 'relative', textDecoration: 'none', padding: '8px 20px', borderRadius: '999px', fontWeight: 500, fontSize: '14px', color: isActive ? 'white' : 'rgba(255,255,255,0.48)' }}>
                   {item.name}
-                  {isActive && (
-                    <motion.div
-                      layoutId="navbar-pill"
-                      style={{
-                        position: 'absolute',
-                        inset: 0,
-                        borderRadius: '999px',
-                        background: 'rgba(123,47,255,0.18)',
-                        zIndex: -1,
-                      }}
-                      transition={{ type: 'spring', stiffness: 380, damping: 38 }}
-                    >
-                      <div
-                        style={{
-                          position: 'absolute',
-                          top: '-2px',
-                          left: '50%',
-                          transform: 'translateX(-50%)',
-                          width: '50%',
-                          height: '2px',
-                          borderRadius: '0 0 2px 2px',
-                          background: 'linear-gradient(90deg, #7B2FFF, #00C2FF)',
-                          boxShadow: '0 0 10px #7B2FFF, 0 0 20px rgba(123,47,255,0.5)',
-                        }}
-                      />
-                      <div
-                        style={{
-                          position: 'absolute',
-                          top: '-8px',
-                          left: '50%',
-                          transform: 'translateX(-50%)',
-                          width: '70%',
-                          height: '16px',
-                          background: 'rgba(123,47,255,0.12)',
-                          borderRadius: '50%',
-                          filter: 'blur(6px)',
-                        }}
-                      />
-                    </motion.div>
-                  )}
+                  {isActive && <motion.div layoutId="navbar-pill" style={{ position: 'absolute', inset: 0, borderRadius: '999px', background: 'rgba(123,47,255,0.18)', zIndex: -1 }} />}
                 </Link>
               );
             })}
           </div>
 
-          <Link
-            to="/contact"
-            style={{
-              textDecoration: 'none',
-              flexShrink: 0,
-              padding: '10px 24px',
-              borderRadius: '10px',
-              background: 'linear-gradient(135deg, #7B2FFF, #00C2FF)',
-              fontFamily: 'DM Sans, sans-serif',
-              fontWeight: 600,
-              fontSize: '14px',
-              color: 'white',
-              boxShadow: '0 4px 20px rgba(123,47,255,0.3)',
-              transition: 'transform 220ms ease, box-shadow 220ms ease',
-              display: 'inline-block',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = '0 8px 28px rgba(123,47,255,0.55)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'none';
-              e.currentTarget.style.boxShadow = '0 4px 20px rgba(123,47,255,0.3)';
-            }}
-          >
+          <Link to="/contact" style={{ textDecoration: 'none', padding: '10px 24px', borderRadius: '10px', background: 'linear-gradient(135deg, #7B2FFF, #00C2FF)', fontWeight: 600, fontSize: '14px', color: 'white' }}>
             Devis gratuit
           </Link>
         </div>
       </nav>
 
-      <nav
-        className="flex md:hidden"
-        style={{
-          position: 'fixed',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          zIndex: 100,
-          padding: '10px 12px 20px',
-          background: 'rgba(3,3,10,0.94)',
-          backdropFilter: 'blur(24px)',
-          WebkitBackdropFilter: 'blur(24px)',
-          borderTop: '1px solid rgba(123,47,255,0.13)',
-        }}
-      >
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-around',
-            alignItems: 'center',
-            width: '100%',
-            background: 'rgba(255,255,255,0.03)',
-            border: '1px solid rgba(255,255,255,0.06)',
-            borderRadius: '999px',
-            padding: '6px',
-          }}
-        >
+      <header className="flex md:hidden" style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, padding: '12px 20px', background: 'rgba(3,3,10,0.92)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(123,47,255,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Link to="/" style={{ textDecoration: 'none' }}>
+          <AlteraLogo size={38} textSize={20} />
+        </Link>
+        <Link to="/contact" style={{ textDecoration: 'none', padding: '8px 18px', borderRadius: '8px', background: 'linear-gradient(135deg, #7B2FFF, #00C2FF)', fontWeight: 600, fontSize: '13px', color: 'white', boxShadow: '0 4px 16px rgba(123,47,255,0.4)' }}>
+          Devis gratuit
+        </Link>
+      </header>
+
+      <nav className="flex md:hidden" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 100, padding: '10px 8px 20px', background: 'rgba(3,3,10,0.94)', backdropFilter: 'blur(24px)', borderTop: '1px solid rgba(123,47,255,0.13)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', width: '100%', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '999px', padding: '6px' }}>
           {NAV_ITEMS.map((item) => {
             const Icon = item.icon;
             const isActive = active === item.name;
             return (
-              <Link
-                key={item.name}
-                to={item.url}
-                style={{
-                  position: 'relative',
-                  textDecoration: 'none',
-                  flex: 1,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: '8px 4px',
-                  borderRadius: '999px',
-                  gap: '3px',
-                  color: isActive ? 'white' : 'rgba(255,255,255,0.38)',
-                  transition: 'color 200ms',
-                }}
-              >
+              <Link key={item.name} to={item.url} style={{ position: 'relative', textDecoration: 'none', flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '8px 4px', borderRadius: '999px', gap: '3px', color: isActive ? 'white' : 'rgba(255,255,255,0.38)' }}>
                 {isActive && (
-                  <motion.div
-                    layoutId="navbar-pill-mobile"
-                    style={{
-                      position: 'absolute',
-                      inset: 0,
-                      borderRadius: '999px',
-                      background: 'rgba(123,47,255,0.22)',
-                      zIndex: -1,
-                    }}
-                    transition={{ type: 'spring', stiffness: 380, damping: 38 }}
-                  >
-                    <div
-                      style={{
-                        position: 'absolute',
-                        top: '-2px',
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        width: '40%',
-                        height: '2px',
-                        borderRadius: '999px',
-                        background: 'linear-gradient(90deg, #7B2FFF, #00C2FF)',
-                        boxShadow: '0 0 8px #7B2FFF',
-                      }}
-                    />
+                  <motion.div layoutId="mobile-pill" style={{ position: 'absolute', inset: 0, borderRadius: '999px', background: 'rgba(123,47,255,0.22)', zIndex: -1 }}>
+                    <div style={{ position: 'absolute', top: '-2px', left: '50%', transform: 'translateX(-50%)', width: '40%', height: '2px', borderRadius: '999px', background: 'linear-gradient(90deg, #7B2FFF, #00C2FF)', boxShadow: '0 0 8px #7B2FFF' }} />
                   </motion.div>
                 )}
-                <Icon size={19} strokeWidth={isActive ? 2.5 : 1.8} style={{ transition: 'all 200ms' }} />
-                <span
-                  style={{
-                    fontFamily: 'DM Sans, sans-serif',
-                    fontSize: '10px',
-                    fontWeight: isActive ? 600 : 400,
-                    lineHeight: 1,
-                  }}
-                >
-                  {item.name === 'Pourquoi un site ?' ? 'Pourquoi ?' : item.name}
-                </span>
+                <Icon size={19} strokeWidth={isActive ? 2.5 : 1.8} />
+                <span style={{ fontSize: '10px', fontWeight: isActive ? 600 : 400, lineHeight: 1 }}>{item.name === 'Pourquoi un site ?' ? 'Pourquoi ?' : item.name}</span>
               </Link>
             );
           })}
@@ -259,7 +81,7 @@ export default function Navbar() {
       </nav>
 
       <div className="hidden md:block" style={{ height: '70px' }} />
-      <div className="flex md:hidden" style={{ height: '76px' }} />
+      <div className="flex md:hidden" style={{ height: '60px' }} />
     </>
   );
 }
