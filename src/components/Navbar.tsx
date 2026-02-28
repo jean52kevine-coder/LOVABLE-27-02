@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Layers, Euro, HelpCircle } from 'lucide-react';
+import { Euro, HelpCircle, Home, Layers } from 'lucide-react';
+import { AlteraLogo } from './AlteraLogo';
 
-const ITEMS = [
+const NAV_ITEMS = [
   { name: 'Accueil', url: '/', icon: Home },
   { name: 'Services', url: '/services', icon: Layers },
   { name: 'Tarifs', url: '/tarifs', icon: Euro },
@@ -14,13 +15,13 @@ export default function Navbar() {
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
 
-  const active = ITEMS.find((i) =>
-    i.url === '/' ? location.pathname === '/' : location.pathname.startsWith(i.url),
-  )?.name ?? ITEMS[0].name;
+  const active =
+    NAV_ITEMS.find((i) => (i.url === '/' ? location.pathname === '/' : location.pathname.startsWith(i.url)))?.name ??
+    NAV_ITEMS[0].name;
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 60);
-    window.addEventListener('scroll', fn);
+    window.addEventListener('scroll', fn, { passive: true });
     return () => window.removeEventListener('scroll', fn);
   }, []);
 
@@ -34,10 +35,11 @@ export default function Navbar() {
           left: 0,
           right: 0,
           zIndex: 100,
-          transition: 'all 400ms ease',
+          transition: 'background 350ms ease, border-color 350ms ease, backdrop-filter 350ms ease',
           background: scrolled ? 'rgba(3,3,10,0.90)' : 'transparent',
           backdropFilter: scrolled ? 'blur(24px)' : 'none',
-          borderBottom: scrolled ? '1px solid rgba(123,47,255,0.15)' : '1px solid transparent',
+          WebkitBackdropFilter: scrolled ? 'blur(24px)' : 'none',
+          borderBottom: `1px solid ${scrolled ? 'rgba(123,47,255,0.13)' : 'transparent'}`,
         }}
       >
         <div
@@ -45,33 +47,15 @@ export default function Navbar() {
             maxWidth: '1200px',
             margin: '0 auto',
             padding: '0 48px',
-            height: '72px',
+            height: '70px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
             width: '100%',
           }}
         >
-          <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div
-              style={{
-                width: '36px',
-                height: '36px',
-                borderRadius: '10px',
-                background: 'linear-gradient(135deg,#7B2FFF,#00C2FF)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                boxShadow: '0 0 20px rgba(123,47,255,0.5)',
-              }}
-            >
-              <span style={{ fontFamily: 'Syne,sans-serif', fontWeight: 800, fontSize: '18px', color: 'white' }}>A</span>
-            </div>
-            <span style={{ fontFamily: 'Syne,sans-serif', fontWeight: 800, fontSize: '21px' }}>
-              <span style={{ color: 'white' }}>ALT</span>
-              <span style={{ background: 'linear-gradient(135deg,#7B2FFF,#00C2FF)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>É</span>
-              <span style={{ color: 'white' }}>RA</span>
-            </span>
+          <Link to="/" style={{ textDecoration: 'none', flexShrink: 0 }}>
+            <AlteraLogo size={34} textSize={19} />
           </Link>
 
           <div
@@ -86,7 +70,7 @@ export default function Navbar() {
               backdropFilter: 'blur(10px)',
             }}
           >
-            {ITEMS.map((item) => {
+            {NAV_ITEMS.map((item) => {
               const isActive = active === item.name;
               return (
                 <Link
@@ -95,20 +79,20 @@ export default function Navbar() {
                   style={{
                     position: 'relative',
                     textDecoration: 'none',
-                    padding: '8px 22px',
+                    padding: '8px 20px',
                     borderRadius: '999px',
-                    fontFamily: 'DM Sans,sans-serif',
+                    fontFamily: 'DM Sans, sans-serif',
                     fontWeight: 500,
                     fontSize: '14px',
-                    color: isActive ? 'white' : 'rgba(255,255,255,0.5)',
+                    color: isActive ? 'white' : 'rgba(255,255,255,0.48)',
                     transition: 'color 200ms ease',
-                    display: 'block',
+                    whiteSpace: 'nowrap',
                   }}
                 >
                   {item.name}
                   {isActive && (
                     <motion.div
-                      layoutId="tubelight-desktop"
+                      layoutId="navbar-pill"
                       style={{
                         position: 'absolute',
                         inset: 0,
@@ -126,8 +110,8 @@ export default function Navbar() {
                           transform: 'translateX(-50%)',
                           width: '50%',
                           height: '2px',
-                          borderRadius: '999px',
-                          background: 'linear-gradient(90deg,#7B2FFF,#00C2FF)',
+                          borderRadius: '0 0 2px 2px',
+                          background: 'linear-gradient(90deg, #7B2FFF, #00C2FF)',
                           boxShadow: '0 0 10px #7B2FFF, 0 0 20px rgba(123,47,255,0.5)',
                         }}
                       />
@@ -155,15 +139,16 @@ export default function Navbar() {
             to="/contact"
             style={{
               textDecoration: 'none',
-              padding: '10px 26px',
+              flexShrink: 0,
+              padding: '10px 24px',
               borderRadius: '10px',
-              background: 'linear-gradient(135deg,#7B2FFF,#00C2FF)',
-              fontFamily: 'DM Sans,sans-serif',
+              background: 'linear-gradient(135deg, #7B2FFF, #00C2FF)',
+              fontFamily: 'DM Sans, sans-serif',
               fontWeight: 600,
               fontSize: '14px',
               color: 'white',
-              boxShadow: '0 4px 20px rgba(123,47,255,0.35)',
-              transition: 'transform 200ms, box-shadow 200ms',
+              boxShadow: '0 4px 20px rgba(123,47,255,0.3)',
+              transition: 'transform 220ms ease, box-shadow 220ms ease',
               display: 'inline-block',
             }}
             onMouseEnter={(e) => {
@@ -172,7 +157,7 @@ export default function Navbar() {
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = 'none';
-              e.currentTarget.style.boxShadow = '0 4px 20px rgba(123,47,255,0.35)';
+              e.currentTarget.style.boxShadow = '0 4px 20px rgba(123,47,255,0.3)';
             }}
           >
             Devis gratuit
@@ -188,10 +173,11 @@ export default function Navbar() {
           left: 0,
           right: 0,
           zIndex: 100,
-          padding: '12px 16px 20px',
-          background: 'rgba(3,3,10,0.92)',
+          padding: '10px 12px 20px',
+          background: 'rgba(3,3,10,0.94)',
           backdropFilter: 'blur(24px)',
-          borderTop: '1px solid rgba(123,47,255,0.15)',
+          WebkitBackdropFilter: 'blur(24px)',
+          borderTop: '1px solid rgba(123,47,255,0.13)',
         }}
       >
         <div
@@ -201,12 +187,12 @@ export default function Navbar() {
             alignItems: 'center',
             width: '100%',
             background: 'rgba(255,255,255,0.03)',
-            border: '1px solid rgba(255,255,255,0.07)',
+            border: '1px solid rgba(255,255,255,0.06)',
             borderRadius: '999px',
             padding: '6px',
           }}
         >
-          {ITEMS.map((item) => {
+          {NAV_ITEMS.map((item) => {
             const Icon = item.icon;
             const isActive = active === item.name;
             return (
@@ -223,19 +209,19 @@ export default function Navbar() {
                   justifyContent: 'center',
                   padding: '8px 4px',
                   borderRadius: '999px',
-                  gap: '2px',
-                  color: isActive ? 'white' : 'rgba(255,255,255,0.4)',
+                  gap: '3px',
+                  color: isActive ? 'white' : 'rgba(255,255,255,0.38)',
                   transition: 'color 200ms',
                 }}
               >
                 {isActive && (
                   <motion.div
-                    layoutId="tubelight-mobile"
+                    layoutId="navbar-pill-mobile"
                     style={{
                       position: 'absolute',
                       inset: 0,
                       borderRadius: '999px',
-                      background: 'rgba(123,47,255,0.2)',
+                      background: 'rgba(123,47,255,0.22)',
                       zIndex: -1,
                     }}
                     transition={{ type: 'spring', stiffness: 380, damping: 38 }}
@@ -249,22 +235,31 @@ export default function Navbar() {
                         width: '40%',
                         height: '2px',
                         borderRadius: '999px',
-                        background: 'linear-gradient(90deg,#7B2FFF,#00C2FF)',
+                        background: 'linear-gradient(90deg, #7B2FFF, #00C2FF)',
                         boxShadow: '0 0 8px #7B2FFF',
                       }}
                     />
                   </motion.div>
                 )}
-                <Icon size={20} strokeWidth={isActive ? 2.5 : 1.8} />
-                <span style={{ fontFamily: 'DM Sans,sans-serif', fontSize: '10px', fontWeight: 500 }}>{item.name.split(' ')[0]}</span>
+                <Icon size={19} strokeWidth={isActive ? 2.5 : 1.8} style={{ transition: 'all 200ms' }} />
+                <span
+                  style={{
+                    fontFamily: 'DM Sans, sans-serif',
+                    fontSize: '10px',
+                    fontWeight: isActive ? 600 : 400,
+                    lineHeight: 1,
+                  }}
+                >
+                  {item.name === 'Pourquoi un site ?' ? 'Pourquoi ?' : item.name}
+                </span>
               </Link>
             );
           })}
         </div>
       </nav>
 
-      <div className="hidden md:block" style={{ height: '72px' }} />
-      <div className="flex md:hidden" style={{ height: '80px' }} />
+      <div className="hidden md:block" style={{ height: '70px' }} />
+      <div className="flex md:hidden" style={{ height: '76px' }} />
     </>
   );
 }
