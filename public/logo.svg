@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <defs>
+    <linearGradient id="lg1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7B2FFF"/>
+      <stop offset="100%" stop-color="#00C2FF"/>
+    </linearGradient>
+    <linearGradient id="lg2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#7B2FFF" stop-opacity="0.2"/>
+      <stop offset="50%" stop-color="#00C2FF" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#7B2FFF" stop-opacity="0.2"/>
+    </linearGradient>
+    <linearGradient id="lg3" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#7B2FFF" stop-opacity="0.2"/>
+      <stop offset="50%" stop-color="#7B2FFF" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#00C2FF" stop-opacity="0.2"/>
+    </linearGradient>
+    <filter id="glo">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="b"/>
+      <feComposite in="SourceGraphic" in2="b" operator="over"/>
+    </filter>
+    <filter id="gloSm">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="b"/>
+      <feComposite in="SourceGraphic" in2="b" operator="over"/>
+    </filter>
+  </defs>
+  <ellipse cx="100" cy="100" rx="82" ry="32" transform="rotate(-35 100 100)" stroke="url(#lg2)" stroke-width="1.5" fill="none" opacity="0.75"/>
+  <ellipse cx="100" cy="100" rx="82" ry="32" transform="rotate(55 100 100)" stroke="url(#lg3)" stroke-width="1" fill="none" opacity="0.45"/>
+  <circle cx="100" cy="100" r="48" stroke="url(#lg1)" stroke-width="0.8" fill="none" opacity="0.25" stroke-dasharray="80 220"/>
+  <circle cx="152" cy="74" r="5" fill="url(#lg1)" filter="url(#glo)"/>
+  <circle cx="152" cy="74" r="9" fill="none" stroke="url(#lg1)" stroke-width="0.8" opacity="0.4"/>
+  <circle cx="52" cy="132" r="3" fill="#00C2FF" opacity="0.7" filter="url(#gloSm)"/>
+  <circle cx="140" cy="118" r="2" fill="#7B2FFF" opacity="0.8"/>
+  <circle cx="100" cy="100" r="20" fill="url(#lg1)" opacity="0.1"/>
+  <line x1="100" y1="84" x2="89" y2="112" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
+  <line x1="100" y1="84" x2="111" y2="112" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
+  <line x1="91.5" y1="102" x2="108.5" y2="102" stroke="url(#lg1)" stroke-width="2" stroke-linecap="round" filter="url(#gloSm)"/>
+  <circle cx="100" cy="83" r="2.5" fill="url(#lg1)" filter="url(#glo)"/>
+</svg>

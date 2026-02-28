@@ -2,6 +2,49 @@
 @tailwind components;
 @tailwind utilities;
 
+
+:root {
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+
+  --text-hero-h1: clamp(36px, 5.5vw, 64px);
+  --text-hero-sub: clamp(15px, 1.6vw, 17px);
+  --text-section-h2: clamp(26px, 3.5vw, 42px);
+  --text-card-title: 19px;
+  --text-body: 14px;
+  --text-small: 13px;
+  --text-label: 11px;
+
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255,255,255,0.68);
+  --text-muted: rgba(255,255,255,0.45);
+  --text-faint: rgba(255,255,255,0.28);
+
+  --violet: #7B2FFF;
+  --cyan: #00C2FF;
+  --bg: #03030A;
+}
+
+body {
+  background: var(--bg);
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+* { box-sizing: border-box; }
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #03030A; }
+::-webkit-scrollbar-thumb {
+  background: rgba(123,47,255,0.3);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(123,47,255,0.6);
+}
+
 @layer base {
   :root {
     --bg-deep: 240 54% 2.5%;
