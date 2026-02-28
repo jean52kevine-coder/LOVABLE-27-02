@@ -16,9 +16,9 @@
   --text-label: 11px;
 
   --text-primary: #ffffff;
-  --text-secondary: rgba(255,255,255,0.68);
-  --text-muted: rgba(255,255,255,0.45);
-  --text-faint: rgba(255,255,255,0.28);
+  --text-secondary: rgba(255,255,255,0.80);
+  --text-muted: rgba(255,255,255,0.55);
+  --text-faint: rgba(255,255,255,0.35);
 
   --violet: #7B2FFF;
   --cyan: #00C2FF;
@@ -28,17 +28,17 @@
 body {
   background: var(--bg);
   margin: 0;
-  font-family: var(--font-body);
+  font-family: 'DM Sans', sans-serif;
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
 }
 
 * { box-sizing: border-box; }
 
-::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: #03030A; }
 ::-webkit-scrollbar-thumb {
-  background: rgba(123,47,255,0.3);
+  background: rgba(123,47,255,0.35);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {

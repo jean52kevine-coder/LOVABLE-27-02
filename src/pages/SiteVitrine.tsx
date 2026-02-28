@@ -31,7 +31,7 @@ const SiteVitrine = () => {
   const featuresReveal = useReveal(0.1);
 
   return (
-    <div className="relative">
+    <div className="relative pt-[60px] pb-[76px] md:pt-0 md:pb-0">
       {/* Hero */}
       <section className="pt-24 pb-16 px-4">
         <div className="container mx-auto max-w-5xl">
