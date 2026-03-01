@@ -106,6 +106,12 @@ export default {
           from: { transform: 'translateX(0)' },
           to: { transform: 'translateX(calc(-50% - 0.75rem))' },
         },
+        meteor: {
+          "0%": { transform: "rotate(215deg) translateX(0)", opacity: "1" },
+          "70%": { opacity: "1" },
+          "100%": { transform: "rotate(215deg) translateX(-500px)", opacity: "0" },
+        },
+        "border-beam": { "100%": { "offset-distance": "100%" } },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -113,6 +119,8 @@ export default {
         "fade-in": "fade-in 0.5s ease-out",
         float: "float 6s ease-in-out infinite",
         marquee: "marqueeScroll var(--duration, 40s) linear infinite",
+        "meteor-effect": "meteor 5s linear infinite",
+        "border-beam": "border-beam calc(var(--duration)*1s) infinite linear",
       },
     },
   },
