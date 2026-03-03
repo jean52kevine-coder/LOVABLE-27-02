@@ -50,7 +50,8 @@ export function AlteraLogo({ size = 44, showText = true, textSize = 22 }: Altera
       {showText && (
         <span
           style={{
-            fontFamily: 'Syne, sans-serif',
+            fontFamily: 'Playfair Display, serif',
+            fontStyle: 'italic',
             fontWeight: 800,
             fontSize: `${textSize}px`,
             lineHeight: 1,
@@ -60,7 +61,7 @@ export function AlteraLogo({ size = 44, showText = true, textSize = 22 }: Altera
           <span style={{ color: 'white' }}>ALT</span>
           <span
             style={{
-              background: 'linear-gradient(135deg, #7B2FFF, #00C2FF)',
+              background: 'linear-gradient(135deg, #C9A84C, #f6e2a8)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
             }}

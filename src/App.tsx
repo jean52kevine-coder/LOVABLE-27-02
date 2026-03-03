@@ -9,6 +9,7 @@ import CosmicBackground from '@/components/CosmicBackground';
 import Navbar from '@/components/Navbar';
 import ScrollToTop from '@/components/ScrollToTop';
 import { Footer } from '@/components/Footer';
+import CustomCursor from '@/components/CustomCursor';
 
 const Index = lazy(() => import('./pages/Index'));
 const Services = lazy(() => import('./pages/Services'));
@@ -16,6 +17,7 @@ const SiteVitrine = lazy(() => import('./pages/SiteVitrine'));
 const SiteEcommerce = lazy(() => import('./pages/SiteEcommerce'));
 const Maintenance = lazy(() => import('./pages/Maintenance'));
 const Tarifs = lazy(() => import('./pages/Tarifs'));
+const Realisations = lazy(() => import('./pages/Realisations'));
 const PourquoiUnSite = lazy(() => import('./pages/PourquoiUnSite'));
 const Contact = lazy(() => import('./pages/Contact'));
 const NotFound = lazy(() => import('./pages/NotFound'));
@@ -45,6 +47,7 @@ function App() {
         }}
       >
         <CosmicBackground />
+        <CustomCursor />
         <div style={{ position: 'relative', zIndex: 1 }}>
           <QueryClientProvider client={queryClient}>
             <TooltipProvider>
@@ -58,10 +61,14 @@ function App() {
                     <Routes>
                       <Route path="/" element={<Index />} />
                       <Route path="/services" element={<Services />} />
+                      <Route path="/services/vitrine" element={<SiteVitrine />} />
+                      <Route path="/services/ecommerce" element={<SiteEcommerce />} />
+                      <Route path="/services/maintenance" element={<Maintenance />} />
                       <Route path="/site-vitrine" element={<SiteVitrine />} />
                       <Route path="/site-ecommerce" element={<SiteEcommerce />} />
                       <Route path="/maintenance" element={<Maintenance />} />
                       <Route path="/tarifs" element={<Tarifs />} />
+                      <Route path="/realisations" element={<Realisations />} />
                       <Route path="/pourquoi-un-site" element={<PourquoiUnSite />} />
                       <Route path="/contact" element={<Contact />} />
                       <Route path="*" element={<NotFound />} />

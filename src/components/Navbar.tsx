@@ -1,87 +1,46 @@
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Euro, HelpCircle, Home, Layers } from 'lucide-react';
 import { AlteraLogo } from './AlteraLogo';
 
 const NAV_ITEMS = [
-  { name: 'Accueil', url: '/', icon: Home },
-  { name: 'Services', url: '/services', icon: Layers },
-  { name: 'Tarifs', url: '/tarifs', icon: Euro },
-  { name: 'Pourquoi un site ?', url: '/pourquoi-un-site', icon: HelpCircle },
+  { name: 'Services', url: '/services' },
+  { name: 'Réalisations', url: '/realisations' },
+  { name: 'Tarifs', url: '/tarifs' },
+  { name: 'Pourquoi un site ?', url: '/pourquoi-un-site' },
 ];
 
 export default function Navbar() {
   const location = useLocation();
-  const [scrolled, setScrolled] = useState(false);
-
-  const active =
-    NAV_ITEMS.find((i) => (i.url === '/' ? location.pathname === '/' : location.pathname.startsWith(i.url)))?.name ??
-    NAV_ITEMS[0].name;
-
-  useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 60);
-    window.addEventListener('scroll', fn, { passive: true });
-    return () => window.removeEventListener('scroll', fn);
-  }, []);
+  const [open, setOpen] = useState(false);
 
   return (
     <>
-      <nav className="hidden md:flex" style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, background: scrolled ? 'rgba(3,3,10,0.90)' : 'transparent', backdropFilter: scrolled ? 'blur(24px)' : 'none', borderBottom: `1px solid ${scrolled ? 'rgba(123,47,255,0.13)' : 'transparent'}` }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 48px', height: '70px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-          <Link to="/" style={{ textDecoration: 'none' }}>
-            <AlteraLogo size={44} textSize={22} />
-          </Link>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '2px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '999px', padding: '4px' }}>
-            {NAV_ITEMS.map((item) => {
-              const isActive = active === item.name;
-              return (
-                <Link key={item.name} to={item.url} style={{ position: 'relative', textDecoration: 'none', padding: '8px 20px', borderRadius: '999px', fontWeight: 500, fontSize: '14px', color: isActive ? 'white' : 'rgba(255,255,255,0.48)' }}>
-                  {item.name}
-                  {isActive && <motion.div layoutId="navbar-pill" style={{ position: 'absolute', inset: 0, borderRadius: '999px', background: 'rgba(123,47,255,0.18)', zIndex: -1 }} />}
-                </Link>
-              );
-            })}
+      <nav className="fixed top-0 left-0 right-0 z-[100] bg-[#030309]/90 backdrop-blur-xl border-b border-white/10">
+        <div className="max-w-[1280px] mx-auto px-5 md:px-10 h-[70px] flex items-center justify-between">
+          <Link to="/" className="no-underline"><AlteraLogo size={44} textSize={22} /></Link>
+          <div className="hidden md:flex items-center gap-7">
+            {NAV_ITEMS.map((item) => (
+              <Link key={item.url} to={item.url} className={`nav-link ${location.pathname.startsWith(item.url) ? 'text-white' : 'text-white/60'}`}>{item.name}</Link>
+            ))}
           </div>
-
-          <Link to="/contact" style={{ textDecoration: 'none', padding: '10px 24px', borderRadius: '10px', background: 'linear-gradient(135deg, #7B2FFF, #00C2FF)', fontWeight: 600, fontSize: '14px', color: 'white' }}>
-            Devis gratuit
-          </Link>
+          <Link to="/contact" className="hidden md:inline-block rounded-full px-6 py-2.5 bg-gradient-to-r from-[#6D28D9] to-[#06B6D4] text-white">Démarrer un projet</Link>
+          <button onClick={() => setOpen(true)} className="md:hidden text-white">Menu</button>
         </div>
       </nav>
 
-      <header className="flex md:hidden" style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, padding: '12px 20px', background: 'rgba(3,3,10,0.92)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(123,47,255,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <Link to="/" style={{ textDecoration: 'none' }}>
-          <AlteraLogo size={38} textSize={20} />
-        </Link>
-        <Link to="/contact" style={{ textDecoration: 'none', padding: '8px 18px', borderRadius: '8px', background: 'linear-gradient(135deg, #7B2FFF, #00C2FF)', fontWeight: 600, fontSize: '13px', color: 'white', boxShadow: '0 4px 16px rgba(123,47,255,0.4)' }}>
-          Devis gratuit
-        </Link>
-      </header>
-
-      <nav className="flex md:hidden" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 100, padding: '10px 8px 20px', background: 'rgba(3,3,10,0.94)', backdropFilter: 'blur(24px)', borderTop: '1px solid rgba(123,47,255,0.13)' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', width: '100%', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '999px', padding: '6px' }}>
-          {NAV_ITEMS.map((item) => {
-            const Icon = item.icon;
-            const isActive = active === item.name;
-            return (
-              <Link key={item.name} to={item.url} style={{ position: 'relative', textDecoration: 'none', flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '8px 4px', borderRadius: '999px', gap: '3px', color: isActive ? 'white' : 'rgba(255,255,255,0.38)' }}>
-                {isActive && (
-                  <motion.div layoutId="mobile-pill" style={{ position: 'absolute', inset: 0, borderRadius: '999px', background: 'rgba(123,47,255,0.22)', zIndex: -1 }}>
-                    <div style={{ position: 'absolute', top: '-2px', left: '50%', transform: 'translateX(-50%)', width: '40%', height: '2px', borderRadius: '999px', background: 'linear-gradient(90deg, #7B2FFF, #00C2FF)', boxShadow: '0 0 8px #7B2FFF' }} />
-                  </motion.div>
-                )}
-                <Icon size={19} strokeWidth={isActive ? 2.5 : 1.8} />
-                <span style={{ fontSize: '10px', fontWeight: isActive ? 600 : 400, lineHeight: 1 }}>{item.name === 'Pourquoi un site ?' ? 'Pourquoi ?' : item.name}</span>
-              </Link>
-            );
-          })}
+      <aside className={`fixed top-0 right-0 h-screen w-[80%] max-w-[320px] bg-[#070710] border-l border-white/10 z-[120] transition ${open ? 'translate-x-0' : 'translate-x-full'} md:hidden`}>
+        <div className="p-6 flex justify-between items-center border-b border-white/10">
+          <span className="font-mono text-xs tracking-[0.2em] text-[#C9A84C]">NAVIGATION</span>
+          <button onClick={() => setOpen(false)} className="text-white/70">Fermer</button>
         </div>
-      </nav>
-
-      <div className="hidden md:block" style={{ height: '70px' }} />
-      <div className="flex md:hidden" style={{ height: '60px' }} />
+        <div className="p-6 flex flex-col gap-4">
+          {NAV_ITEMS.map((item) => (
+            <Link key={item.url} to={item.url} onClick={() => setOpen(false)} className="text-white/80">{item.name}</Link>
+          ))}
+          <Link to="/contact" onClick={() => setOpen(false)} className="mt-4 rounded-full px-5 py-3 text-center bg-gradient-to-r from-[#6D28D9] to-[#06B6D4]">Démarrer un projet</Link>
+        </div>
+      </aside>
+      <div className="h-[70px]" />
     </>
   );
 }
